@@ -28,4 +28,4 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - apt-get update -y && apt-get install -y sshpass
     - echo "Deploying application..."
-    - sshpass -p "\#WcfAMd6" ssh -o StrictHostKeyChecking=no vp-dbbackup@10.94.61.126 'cd /opt/lampp/htdocs/safekup && git pull origin main && echo "Application successfully deployed."'
+    - sshpass -p "\#" ssh -o StrictHostKeyChecking=no v@10.94.61.126 'cd /opt/lampp/htdocs/safekup && git pull origin main && echo "Application successfully deployed."'
