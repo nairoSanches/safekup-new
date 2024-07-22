@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/default.min.css" />
+ 
+  <title>Safekup</title>
+</head>
+
+<body>
+  <div class="container">
+    
+    <div class="forms-container">
+      <div class="signin-signup">
+        <form class="sign-in-form">
+        
+            <img src="assets/images/ebserh.png" class="image" id="headebserh"alt="" style="width: 50%;margin-bottom: 80px;"/>
+          
+          <h2 class="title">Safekup <i class="ace-icon fa fa-database"></i></h2>
+
+          <div class="input-field">
+            <i class="ace-icon fa fa-user"></i>
+            <input type="text" placeholder="Usuário" id="login" />
+          </div>
+          <div class="input-field">
+            <i class="ace-icon fa fa-lock"></i>
+            <input type="password" placeholder="Senha" id="senha" />
+          </div>
+          <input type="button" value="Login" class="btn solid" onclick="valida_login()">
+          <p class="social-text">Integrado ao Active Directory</p>
+          <div class="social-media">
+            <a href="#" class="social-icon">
+              <i class="ace-icon fa fa-windows"></i>
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel left-panel">
+        <div class="content">
+          <h3>Presisa de Ajuda ?</h3>
+          <p>
+            Chega aqui!
+          </p>
+          <button class="btn transparent"
+            onclick="window.open('https://glpi.hu-ufsc.ebserh.gov.br/glpi-informatica/front/knowbaseitem.form.php?id=250', '_blank');">
+            GLPI
+          </button>
+
+        </div>
+        <img src="assets/css/images/log.svg" class="image" alt="" />
+      </div>
+      <div class="panel right-panel">
+        <div class="content">
+          <h3>Segue o lider!</h3>
+          <p>
+
+          </p>
+
+        </div>
+        <img src="assets/css/images/register.svg" class="image" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/funcoes_diversas.js"></script>
+  <script src="assets/js/alertify.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/funcoes_diversas.js"></script>
+</body>
+
+</html>

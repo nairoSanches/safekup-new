@@ -1,0 +1,48 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  # Define the default image to use for all jobs
+  IMAGE: docker:latest
+
+before_script:
+  # Update the package lists for packages that need upgrading
+  - apt-get update -qq
+
+build_job:
+  stage: build
+  script:
+    - echo "Building the project..."
+    # Adicione aqui os comandos necessários para construir seu projeto
+    # Exemplo: 
+    # - make build
+
+test_job:
+  stage: test
+  script:
+    - echo "Running tests..."
+    # Adicione aqui os comandos necessários para executar os testes
+    # Exemplo:
+    # - make test
+
+deploy_job:
+  stage: deploy
+  script:
+    - echo "Deploying to production..."
+    # Adicione aqui os comandos necessários para o deploy, se necessário
+    # Exemplo:
+    # - make deploy
+  only:
+    - main
+
+# Optional: Define a job that will run when merging to main
+merge_to_main:
+  stage: deploy
+  script:
+    - echo "Merging HU-02 to main..."
+    # Comandos para realizar o merge, se necessário
+  only:
+    - HU-02
+
