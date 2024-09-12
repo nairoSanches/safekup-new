@@ -3,7 +3,8 @@ variables:
   SSH_HOST: "10.94.61.126"
   SSH_PRIVATE_KEY: |
     -----BEGIN RSA PRIVATE KEY-----
-    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEQCq5q749RlLcxWh66VZnT7TYkvZ6KYkn+GBfSWPgkz nairo.sanches@HUSC-WK-8620730
+    ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCdYDD0kbjjFnbWApSZ+M2pPxD7/wXbzhLtWEdEKwb4BmpNKUvbyY7VUvxntmLC16lRINJQuvsl3aT4scMGJg4u9N4QwCLx1xpkCeyokD9QYJneNIcKl6Yjz2R/bzfrDKeSdC4kuK7Pt8/E/UkAyTrCiAphb/kfJbJiNNuVwuQNCY2z5c8QRK0PCgqgvOirEmLLseRJrmNl6nRw7ZwMwGBLIZkAPqphxHxgMqAEXX//X4xq7aLrzXl/Fj9z26bDkpgXy9tyF+uWqRWjQHnuQfeog+EY0wOTgwGQJID8IaCDj5+/h2t2QS8/HIki+PRZqhR4qgpKmsxghhvQyI1Z4VizalGYpquGx4QIz+gTzIU3eajk0iwOh7KVwrFJcponwFnUHv3nrFasYA/ofHVm4wyAID4FpDjy4YTThCShQLNM+3qilvGh5I3aTDKInUsxmb2oAgpJfutwgFtm7Ag2c11PtLJeXjHmGL7TxawFyB35XISV5Cg/pOq4wTqBYWFTiRUWhAGv9r1Iq1leo6RockN4U2ggmETBVlerdIqM0Hk0dkJf3CSKE0u4mbBSF23zhifXYa1aL6cxKnO5riVoyWW66/tyiTGE8wF4Xe4MQxlgE06HamowwcKTINin3h/1V1d+CcpQoE1AqkodTal943UuUsdTa+hqjtY83WR0DeLvJw== nairo.sanches@ebserh.gob.br
+
     -----END RSA PRIVATE KEY-----
 
 stages:
@@ -19,6 +20,6 @@ deploy:
     - chmod 700 ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
-    - ssh $SSH_USER@$SSH_HOST "cd /opt/lampp/htdocs/safekup && git pull origin main && sudo systemctl sudo /opt/lampp/lampp restart"
+    - ssh $SSH_USER@$SSH_HOST "cd /opt/lampp/htdocs/safekup && git pull origin main && sudo /opt/lampp/lampp restart"
   only:
     - main
