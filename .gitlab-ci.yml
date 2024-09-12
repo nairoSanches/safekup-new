@@ -10,7 +10,7 @@ stages:
   - deploy
 
 deploy:
-  stage: deploy
+  stage: dean
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
