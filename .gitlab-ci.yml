@@ -12,7 +12,9 @@ deploy:
   before_script:
     - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > /tmp/private_key.pem
+    - chmod 600 /tmp/private_key.pem
+    - ssh-add /tmp/private_key.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
@@ -20,4 +22,3 @@ deploy:
     - ssh $SSH_USER@$SSH_HOST "cd /opt/lampp/htdocs/safekup && git pull origin main && sudo /opt/lampp/lampp restart"
   only:
     - main
-
