@@ -21,7 +21,7 @@ deploy:
     - git clean -fd    # Limpa arquivos não rastreados
     - git reset --hard  # Reseta o repositório para o último commit
   script:
-    - ssh $SSH_USER@$SSH_HOST "cd /opt/lampp/htdocs/safekup && git pull origin main && sudo /opt/lampp/lampp restart"
+    - ssh $SSH_USER@$SSH_HOST "cd /opt/lampp/htdocs/safekup && git pull origin main"
   rules:
     - if: '$CI_MERGE_REQUEST_ID'
       when: always
