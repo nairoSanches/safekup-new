@@ -3,7 +3,7 @@ variables:
   SSH_HOST: "10.94.61.126"
 
 stages:
-  - deploy
+  - merge
 
 deploy:
   stage: deploy
