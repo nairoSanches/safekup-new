@@ -31,9 +31,11 @@ $sql->execute();
             <td><?php echo $dados["app_nome"]?></td>
             <td><?php echo $dados["app_descricao"]?></td>
             <td>
+            <div class="checkbox-inline">
               <a href="alterar_app.php?app_id=<?php echo $dados['app_id']?>"><button class="btn btn-xs btn-success"><i class="ace-icon fa fa-pencil bigger-120"></i></button></i></a>
             <a id="app_id" onclick="excluir_app('<?php echo $dados['app_id']?>')"><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></a>            </td>
           </tr>
+          </div>
           <?php } ?>
         </tbody>
       </table>
