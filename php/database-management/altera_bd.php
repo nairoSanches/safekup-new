@@ -15,10 +15,11 @@ if (isset($_GET['bd_id'])) {
 <?php }
 
 ?>
+
+<div class="container" style="width:1350px;">
 <div class="page-header">
   <h1>Alterar Cadastro de Banco de Dados</h1>
 </div>
-<div class="container" style="width:1350px;">
   <div class="col-xs-12 col-sm-8" style="margin-left:210px;">
     <div class="widget-box">
       <div class="widget-header">
@@ -101,7 +102,7 @@ if (isset($_GET['bd_id'])) {
           </center>
           <br>
           <div class="col-sm-12" style="margin-left:10px;">
-            <label onclick="marca_dias_semana();"><input type="checkbox" id="todos_os_dias" class="ace checkbox"><span
+            <label onclick="marca_dias_semana();" class="checkbox-inline"> <input type="checkbox" id="todos_os_dias" class="ace checkbox"><span
                 class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"> Todos os
                         dias</span></label>
             <label class="checkbox-inline"><input type="checkbox" id="dia0" class="ace checkbox"><span

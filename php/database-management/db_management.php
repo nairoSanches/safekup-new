@@ -55,7 +55,7 @@ $stmt->execute();
                 <td><?php echo $dados["bd_ip"] ?></td>
                 <td><?php echo date('d/m/Y H:i:s', strtotime($dados["bd_data_cadastro"])) ?></td>
                 <td><?php echo $dados["bd_backup_ativo"] ?></td>
-                <td>
+                <td class="checkbox-inline">
                   <a href="altera_bd.php?bd_id=<?php echo $dados['bd_id'] ?>"><button class="btn btn-xs btn-success"><i
                         class="ace-icon fa fa-pencil bigger-120"></i></button></i></a>
                   <a id="bd_id" onclick="excluir_computador('<?php echo $dados['bd_id'] ?>')"><button
