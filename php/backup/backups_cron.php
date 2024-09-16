@@ -93,13 +93,14 @@ if ($result && mysqli_num_rows($result) > 0) {
         $bd_recorrencia = intval($row['bd_recorrencia']);
 
         $executar_backup = false;
-
-        // Verificação da hora de backup e recorrência
+         
         if ($bd_recorrencia == 1 && $hora_aux == $bd_hora_backup) {
             $executar_backup = true;
-        } elseif ($bd_recorrencia == 2 && ($hora_aux == $bd_hora_backup || $hora_aux == ($bd_hora_backup + 6) % 24)) {
+        } elseif ($bd_recorrencia == 2 && ($hora_aux == $bd_hora_backup || $hora_aux == 9)) {
             $executar_backup = true;
-        } elseif ($bd_recorrencia == 3 && ($hora_aux == $bd_hora_backup || $hora_aux == ($bd_hora_backup + 6) % 24 || $hora_aux == ($bd_hora_backup + 12) % 24)) {
+        } elseif ($bd_recorrencia == 3 && ($hora_aux == $bd_hora_backup || $hora_aux == 9 || $hora_aux == 15)) {
+            $executar_backup = true;
+        } elseif ($bd_recorrencia == 4 && ($hora_aux == $bd_hora_backup || $hora_aux == 9 || $hora_aux == 15 || $hora_aux == 21)) {
             $executar_backup = true;
         }
 

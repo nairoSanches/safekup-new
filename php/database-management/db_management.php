@@ -30,7 +30,7 @@ $stmt->execute();
           <thead>
             <tr>
               <th class="hidden-480">Nome do banco de dados</th>
-              <th class="hidden-480">Tipo de Banco de Dados</th>
+              <th class="hidden-480">SGBD</th>
               <th class="hidden-480">Horário</th>
               <th class="hidden-480">Aplicação</th>
               <th class="hidden-480">IP</th>
@@ -50,7 +50,7 @@ $stmt->execute();
                   <?php } ?>  
                 </td>
                 <td><?php echo $dados["tipo_nome"] ?></td>
-                <td><?php echo $dados["bd_hora_backup"] ?>:00 Hs</td>
+                <td><?php echo $dados["bd_hora_backup"] ?>:00&nbsp;Hs</td>
                 <td><?php echo $dados["app_nome"] ?></td>
                 <td><?php echo $dados["bd_ip"] ?></td>
                 <td><?php echo date('d/m/Y H:i:s', strtotime($dados["bd_data_cadastro"])) ?></td>
@@ -71,7 +71,8 @@ $stmt->execute();
 </div>
 <script type="text/javascript">
   $('#table').DataTable({
-    "lengthMenu": [[5], [5]],
+    "lengthMenu": [[25, 50, 100], [25, 50, 100]], 
+    "pageLength": 25, 
     "language": {
       "paginate": {
         "previous": "Anterior",
