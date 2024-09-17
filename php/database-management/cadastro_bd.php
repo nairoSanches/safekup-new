@@ -13,7 +13,7 @@ require_once ("../conexao/conexao.php");
     <div class="widget-box">
       <div class="widget-header">
         <h4 class="widget-title">Dados do Banco do Dados</h4>
-        <span style="margin-left:9100%" class="help-button" data-rel="popover" data-trigger="hover"
+        <span style="margin-left:100%" class="help-button" data-rel="popover" data-trigger="hover"
           data-placement="bottom" title="OBS: Cadastro do banco de  dados onde será realizado o Dump.">?</span>
       </div>
       <div class="widget-body">

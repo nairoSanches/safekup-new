@@ -165,7 +165,7 @@ if (isset($_GET['bd_id'])) {
                 <option value="1">1x</option>
                 <option value="2">2x</option>
                 <option value="3">3x</option>
-                <option value="3">3x</option>
+                <option value="3">4x</option>
               </select>
 
             </div>
