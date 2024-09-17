@@ -102,7 +102,7 @@ if (isset($_GET['bd_id'])) {
           </center>
           <br>
           <div class="col-sm-12" style="margin-left:10px;">
-            <label onclick="marca_dias_semana();"><input type="checkbox" id="todos_os_dias" class="ace checkbox"><span
+            <label onclick="marca_dias_semana();" class="checkbox-inline"> <input type="checkbox" id="todos_os_dias" class="ace checkbox"><span
                 class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"> Todos os
                         dias</span></label>
             <label class="checkbox-inline"><input type="checkbox" id="dia0" class="ace checkbox"><span
