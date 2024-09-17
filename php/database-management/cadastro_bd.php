@@ -2,15 +2,18 @@
 require_once ("../painel/painel.php");
 require_once ("../conexao/conexao.php");
 ?>
+
+<div class="container" style="width:1350px;">
+
 <div class="page-header">
   <h1>Cadastro do Banco de Dados</h1>
 </div>
-<div class="container" style="width:1350px;">
+
   <div class="col-xs-12 col-sm-8" style="margin-left:210px;">
     <div class="widget-box">
       <div class="widget-header">
         <h4 class="widget-title">Dados do Banco do Dados</h4>
-        <span style="margin-left:72%" class="help-button" data-rel="popover" data-trigger="hover"
+        <span style="margin-left:9100%" class="help-button" data-rel="popover" data-trigger="hover"
           data-placement="bottom" title="OBS: Cadastro do banco de  dados onde será realizado o Dump.">?</span>
       </div>
       <div class="widget-body">
@@ -149,6 +152,7 @@ require_once ("../conexao/conexao.php");
                 <option value="1">1x</option>
                 <option value="2">2x</option>
                 <option value="3">3x</option>
+                <option value="3">4x</option>
               </select>
 
             </div>

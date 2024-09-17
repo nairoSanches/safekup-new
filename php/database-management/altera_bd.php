@@ -15,10 +15,11 @@ if (isset($_GET['bd_id'])) {
 <?php }
 
 ?>
+
+<div class="container" style="width:1350px;">
 <div class="page-header">
   <h1>Alterar Cadastro de Banco de Dados</h1>
 </div>
-<div class="container" style="width:1350px;">
   <div class="col-xs-12 col-sm-8" style="margin-left:210px;">
     <div class="widget-box">
       <div class="widget-header">
@@ -163,6 +164,7 @@ if (isset($_GET['bd_id'])) {
               <select class="chosen-select form-control" id="bd_recorrencia">
                 <option value="1">1x</option>
                 <option value="2">2x</option>
+                <option value="3">3x</option>
                 <option value="3">3x</option>
               </select>
 
