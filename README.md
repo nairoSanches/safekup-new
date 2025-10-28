@@ -145,4 +145,4 @@ Desenvolvido pela equipe de desenvolvimento do Setor de Tecnologia da Informaç�
 
 - **Personalização**: Ajuste o script de instalação conforme necessário para atender a requisitos específicos do seu ambiente.
 - **Segurança**: Certifique-se de que todas as senhas e informações sensíveis sejam armazenadas e manipuladas de forma segura.
-- **Manutenção**: Periodicamente, verifique e atualize o sistema e as dependências para garantir a segurança e o desempenho.
+- **Manutenção**: Periodicamente, verifique e atualize o sistema e as dependências para garantir a segurança e o desempenho.# safekup-new
