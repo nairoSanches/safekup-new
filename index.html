@@ -1,81 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Safekup — Login</title>
+
+  <!-- Tailwind CSS (CDN) para visual moderno -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Ícones e libs existentes para compatibilidade -->
   <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/alertify.min.css" />
   <link rel="stylesheet" href="assets/css/default.min.css" />
- 
-  <title>Safekup</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
-<body>
-  <div class="container">
-    
-    <div class="forms-container">
-      <div class="signin-signup">
-        <form class="sign-in-form">
-        
-            <img src="assets/images/ebserh.png" class="image" id="headebserh"alt="" style="width: 50%;margin-bottom: 80px;"/>
-          
-          <h2 class="title">Safekup <i class="ace-icon fa fa-database"></i></h2>
-
-          <div class="input-field">
-            <i class="ace-icon fa fa-user"></i>
-            <input type="text" placeholder="Usuário" id="login" />
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100">
+  <div class="flex min-h-screen items-center justify-center px-4 py-8">
+    <div class="w-full max-w-md">
+      <!-- Card -->
+      <div class="bg-slate-900/70 backdrop-blur-xl rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+        <div class="p-8">
+          <div class="flex items-center justify-center mb-6">
+            <img src="assets/images/ebserh.png" alt="Logo EBSERH" class="h-12 object-contain" />
           </div>
-          <div class="input-field">
-            <i class="ace-icon fa fa-lock"></i>
-            <input type="password" placeholder="Senha" id="senha" />
-          </div>
-          <input type="button" value="Login" class="btn solid" onclick="valida_login()">
-          <p class="social-text">Integrado ao Active Directory</p>
-          <div class="social-media">
-            <a href="#" class="social-icon">
-              <i class="ace-icon fa fa-windows"></i>
-            </a>
-          </div>
-        </form>
+          <h1 class="text-2xl font-semibold tracking-tight text-center">Safekup <i class="fa fa-database"></i></h1>
+          <p class="mt-2 text-sm text-center text-slate-300">Integrado ao Active Directory</p>
 
-      </div>
-    </div>
+          <!-- Formulário -->
+          <form class="mt-8" onsubmit="event.preventDefault(); valida_login();">
+            <label class="block text-sm font-medium text-slate-200">Usuário</label>
+            <div class="mt-1 relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <i class="fa fa-user"></i>
+              </span>
+              <input id="login" type="text" autocomplete="username" placeholder="Seu usuário" class="w-full rounded-lg bg-slate-800/80 border border-slate-700 pl-10 pr-3 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
 
-    <div class="panels-container">
-      <div class="panel left-panel">
-        <div class="content">
-          <h3>Presisa de Ajuda ?</h3>
-          <p>
-            Chega aqui!
-          </p>
-          <button class="btn transparent"
-            onclick="window.open('https://glpi.hu-ufsc.ebserh.gov.br/glpi-informatica/front/knowbaseitem.form.php?id=250', '_blank');">
-            GLPI
-          </button>
+            <label class="block text-sm font-medium text-slate-200 mt-4">Senha</label>
+            <div class="mt-1 relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <i class="fa fa-lock"></i>
+              </span>
+              <input id="senha" type="password" autocomplete="current-password" placeholder="Sua senha" class="w-full rounded-lg bg-slate-800/80 border border-slate-700 pl-10 pr-10 py-2 text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <button type="button" aria-label="Mostrar senha" class="absolute inset-y-0 right-0 pr-3 text-slate-400 hover:text-slate-200" onclick="const i=document.getElementById('senha'); i.type = i.type==='password' ? 'text' : 'password';">
+                <i class="fa fa-eye"></i>
+              </button>
+            </div>
 
+            <button type="submit" class="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 font-medium text-white transition-colors">
+              <i class="fa fa-sign-in"></i>
+              <span>Entrar</span>
+            </button>
+
+            <div class="mt-6 text-center">
+              <button type="button" class="text-sm text-slate-300 hover:text-white underline decoration-indigo-500/50 underline-offset-4" onclick="window.open('https://glpi.hu-ufsc.ebserh.gov.br/glpi-informatica/front/knowbaseitem.form.php?id=250', '_blank');">
+                Precisa de ajuda? Acesse o GLPI
+              </button>
+            </div>
+          </form>
         </div>
-        <img src="assets/css/images/log.svg" class="image" alt="" />
       </div>
-      <div class="panel right-panel">
-        <div class="content">
-          <h3>Segue o lider!</h3>
-          <p>
 
-          </p>
-
-        </div>
-        <img src="assets/css/images/register.svg" class="image" alt="" />
-      </div>
+      <!-- Rodapé -->
+      <p class="mt-6 text-center text-xs text-slate-400">
+        © <span id="year"></span> Safekup — HU‑UFSC | EBSERH
+      </p>
     </div>
   </div>
 
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/funcoes_diversas.js"></script>
   <script src="assets/js/alertify.min.js"></script>
-  <script src="assets/js/app.js"></script>
   <script src="assets/js/funcoes_diversas.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 
 </html>
