@@ -15,3 +15,6 @@ composer.lock
 /php/logs/
 /php/backup/
 *.log
+/php/logs/
+/php/backup/
+*.log
