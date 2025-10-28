@@ -21,3 +21,5 @@ composer.lock
 /php/logs/
 /php/backup/
 *.log
+.env
+.env.*
