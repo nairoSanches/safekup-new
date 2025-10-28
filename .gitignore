@@ -1,3 +1,14 @@
+/vendor/
+/node_modules/
+/storage/*.key
+/storage/logs/*.log
+/storage/framework/cache/**
+/storage/framework/sessions/**
+/storage/framework/views/**
 .env
-php/backup/backup.log
-
+.env.*
+.vscode/
+.idea/
+.DS_Store
+*.log
+composer.lock
