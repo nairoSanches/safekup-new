@@ -12,3 +12,6 @@
 .DS_Store
 *.log
 composer.lock
+/php/logs/
+/php/backup/
+*.log
