@@ -13,10 +13,10 @@ abstract class ConDB {
     private function setCon() {
         // Se a conexão ainda não foi estabelecida, cria a conexão utilizando as variáveis do arquivo de configuração
         if (!self::$conexao) {
-            $dbHost = $config['DB_HOST'];
-            $dbName = $config['DB_NAME'];
-            $dbUser = $config['DB_USER'];
-            $dbPass = $config['DB_PASS'];
+            $dbHost = $_ENV['DB_HOST'];
+            $dbName = $_ENV['DB_NAME'];
+            $dbUser = $_ENV['DB_USER'];
+            $dbPass = $_ENV['DB_PASS'];
 
             try {
                 self::$conexao = new PDO("mysql:host={$dbHost};dbname={$dbName}", $dbUser, $dbPass);

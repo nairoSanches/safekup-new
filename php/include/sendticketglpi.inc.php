@@ -16,35 +16,31 @@ class GlpiClient
 
     public function __construct()
     {
-        $dotenvPath = __DIR__ . '/../../';
-
-        if (!file_exists($dotenvPath . '.env')) {
-
-            throw new Exception("Arquivo .env não encontrado no caminho: $dotenvPath");
-        }
-
-        $dotenv = Dotenv::createImmutable($dotenvPath);
+        $dotenv = Dotenv::createImmutable('/etc/safekup', '.env');
         $dotenv->load();
 
         $this->glpi_url = $_ENV['GLPI_URL'];
         $this->app_token = $_ENV['GLPI_API_TOKEN'];
         $this->username = $_ENV['GLPI_USERNAME'];
         $this->password = $_ENV['GLPI_PASSWORD'];
+
     }
 
     private function initSession()
     {
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->glpi_url . 'initSession/',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Basic ' . base64_encode($this->username . ':' . $this->password),
-                'App-Token: ' . $this->app_token,
-                'Content-Type: application/json'
-            ),
-        )
+        curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL => $this->glpi_url . 'initSession/',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: Basic ' . base64_encode($this->username . ':' . $this->password),
+                    'App-Token: ' . $this->app_token,
+                    'Content-Type: application/json'
+                ),
+            )
         );
 
         $response = curl_exec($curl);
@@ -68,12 +64,19 @@ class GlpiClient
                 "name" => $name,
                 "content" => $content,
                 "itilcategories_id" => 1053, //N1 Categoria ITIL (verifique no GLPI)
-                "urgency" => 4, // Urgência (1-5)
-                "impact" => 3, // Impacto (1-5)
-                "priority" => 3, // Prioridade (1-5)
+                "urgency" => 1, // Urgência (1-5)
+                "impact" => 1, // Impacto (1-5)
+                "priority" => 1, // Prioridade (1-5)
                 "requesttypes_id" => 1, // Tipo de solicitação (verifique no GLPI)
-                "status" => 1 // Status inicial do chamado
-               
+                "users_id_recipient" => 2653,
+                "status" => 1, // Status inicial do chamado
+                "users" => [
+                    [
+                        "users_id" => 2653, // ID do requerente
+                        "type" => 1 // 1 indica requerente (solicitante)
+                    ]
+                ]
+
             ]
         ];
 
@@ -99,10 +102,14 @@ class GlpiClient
             if (isset($responseData['id'])) {
                 return $responseData['id'];
             } else {
-                throw new Exception('Falha ao criar o ticket.');
+                throw new Exception('Falha ao criar o ticket. ||' . $response);
             }
         }
     }
+
+
+
+
 }
 /*
 // Exemplo de uso

@@ -42,6 +42,7 @@ $bd_backup_ativo = isset($_POST['bd_backup_ativo']) ? $_POST['bd_backup_ativo'] 
 $bd_ssh = isset($_POST['bd_ssh']) ? $_POST['bd_ssh'] : null;
 $bd_recorrencia = isset($_POST['bd_recorrencia']) ? $_POST['bd_recorrencia'] : null;
 $bd_container = isset($_POST['bd_container']) ? $_POST['bd_container'] : null;
+$bd_id_restore = isset($_POST['bd_id_restore']) ? $_POST['bd_id_restore'] : null;
 
 // Validando se o ID do banco de dados foi fornecido
 if (!$bd_id) {
@@ -72,7 +73,8 @@ $update = mysqli_query($conexao, "UPDATE db_management SET
     bd_backup_ativo     = '$bd_backup_ativo',
     bd_ssh              = '$bd_ssh',
     bd_recorrencia      = '$bd_recorrencia',
-    bd_container        = '$bd_container'
+    bd_container        = '$bd_container',
+    bd_id_restore        = '$bd_id_restore'
     WHERE bd_id = '$bd_id'");
  
 // Verificando se a consulta foi executada com sucesso

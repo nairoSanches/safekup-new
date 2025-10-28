@@ -11,13 +11,9 @@ class Encryption {
     private $encryptionKey;
 
     public function __construct() {
-        $dotenvPath = __DIR__ . '/../../'; 
-        if (!file_exists($dotenvPath . '.env')) {
-            throw new Exception("Arquivo .env não encontrado no caminho: $dotenvPath");
-        }
-
-        $dotenv = Dotenv::createImmutable($dotenvPath);
-        $dotenv->load();
+     
+        $dotenv = Dotenv::createImmutable('/etc/safekup', '.env');
+$dotenv->load();
 
         if (isset($_ENV['ENCRYPTION_KEY'])) {
             $this->encryptionKey = base64_decode($_ENV['ENCRYPTION_KEY']);

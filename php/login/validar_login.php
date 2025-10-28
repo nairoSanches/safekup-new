@@ -5,13 +5,9 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-$dotenvPath = __DIR__ . '/../../';
-if (!file_exists($dotenvPath . '.env')) {
-    throw new Exception("Arquivo .env não encontrado no caminho: $dotenvPath");
-}
-
-$dotenv = Dotenv::createImmutable($dotenvPath);
+$dotenv = Dotenv::createImmutable('/etc/safekup', '.env');
 $dotenv->load();
+ 
 
 $ldap_host = $_ENV['LDAP_HOST'];
 $ldap_port = $_ENV['LDAP_PORT'];

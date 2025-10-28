@@ -62,7 +62,7 @@ require_once ("../login/verifica_sessao.php");
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar ace-save-state">
         <div class="navbar-container ace-save-state" id="navbar-container">
             <div class="navbar-header pull-left">
-                <a href="../painel/home.php" class="navbar-brand">
+                <a href="../painel/painel.php" class="navbar-brand">
                     <small>
                         <!--img src="assets/images/logo.png" style="max-height:40px;"-->
                         <i class="menu-icon fa fa-home"></i>

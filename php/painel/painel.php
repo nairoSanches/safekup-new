@@ -3,7 +3,7 @@
 session_start();
 // Recuperando usuario logado
 $usuario = $_SESSION['login'];
-require_once ("../login/verifica_sessao.php");
+require_once("../login/verifica_sessao.php");
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -63,7 +63,7 @@ require_once ("../login/verifica_sessao.php");
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar ace-save-state">
         <div class="navbar-container ace-save-state" id="navbar-container">
             <div class="navbar-header pull-left">
-                <a href="../painel/home.php" class="navbar-brand">
+                <a href="../painel/painel.php" class="navbar-brand">
                     <small>
                         <!--img src="assets/images/logo.png" style="max-height:40px;"-->
                         <i class="menu-icon fa fa-home"></i>
@@ -86,13 +86,13 @@ require_once ("../login/verifica_sessao.php");
 
             <div class="sidebar-shortcuts" id="sidebar-shortcuts">
                 <ul class="nav nav-list">
-                  <!--  <li class="hover">
-                        <a href="../servico_email/servidor_smtp.php">
-                            <i class="menu-icon fa fa-envelope-o"></i>
-                            <span class="menu-text"> Serviço Email </span>
+                    <li class="hover">
+                        <a href="../restore/restore.php">
+                            <i class="menu-icon fa fa-refresh"></i>
+                            <span class="menu-text">Servidor de Restore</span>
                         </a>
                         <b class="arrow"></b>
-                    </li> -->
+                    </li>
                     <li class="hover">
                         <a href="../servidores/servidores.php">
                             <i class="menu-icon fa fa-server"></i>
@@ -127,7 +127,7 @@ require_once ("../login/verifica_sessao.php");
                             <span class="menu-text">Banco de Dados</span>
                         </a>
                         <b class="arrow"></b>
-                    </li>  
+                    </li>
                     <li class="hover">
                         <a href="#" class="dropdown-toggle">
                             <i class="menu-icon fa fa-pencil-square-o"></i>
@@ -139,12 +139,17 @@ require_once ("../login/verifica_sessao.php");
                         <b class="arrow"></b>
                         <ul class="submenu">
                             <li class="hover"><a href="../relatorios/dumps_realizados.php"><i
-                                        class="menu-icon fa fa-caret-right"></i>Dumps Realizados</a><b class="arrow"></b></li>
+                                        class="menu-icon fa fa-caret-right"></i>Dumps Realizados</a><b
+                                    class="arrow"></b></li>
+                            <li class="hover"><a href="../relatorios/restores_realizados.php"><i
+                                        class="menu-icon fa fa-caret-right"></i>Restores Realizados</a><b
+                                    class="arrow"></b></li>
                         </ul>
                     </li>
 
-                    <li class="hover"><a href="#" onclick="sair()"><i class="menu-icon fa fa-sign-out "></i><span
-                                class="menu-text">Sair</span></a><b class="arrow"></b></li>
+                    <li class="hover"><a href="#" onclick="sair()" style="background: #f7f7f7;"><i
+                                class="menu-icon fa fa-sign-out"></i><span class="menu-text">Sair</span></a><b
+                            class="arrow"></b></li>
             </div>
         </div>
     </div>

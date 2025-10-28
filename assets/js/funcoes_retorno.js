@@ -40,6 +40,7 @@ function retorna_computador(bd_id){
 		$('#bd_ssh').val(data.bd_ssh);
 		$('#bd_recorrencia').val(data.bd_recorrencia);
 		$('#bd_container').val(data.bd_container);
+		$('#restore_id').val(data.bd_id_restore);
 
 		$('.chosen-select').trigger("chosen:updated");		
 
@@ -131,6 +132,7 @@ function retorna_computador2(){
 		$('#bd_usuario_adm').val(data.bd_usuario_adm);
 		$('#bd_backup_ativo').val(data.bd_backup_ativo);
 		$('.chosen-select').trigger("chosen:updated");
+		$('#restore_id').val(data.bd_id_restore);
 
 
 		if(data.dia0 == 1 && data.dia1 == 1 && data.dia2 == 1 && data.dia3 == 1 && data.dia4 == 1 && data.dia5 == 1 && data.dia6 == 1){

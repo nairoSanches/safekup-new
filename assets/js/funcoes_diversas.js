@@ -17,7 +17,7 @@ function valida_login() {
                 alertify.error('Usuário ou senha inválidos!');
                 return;
             } else {
-                window.location.href = "php/painel/home.php";
+                window.location.href = "php/painel/painel.php";
             }
 
         });

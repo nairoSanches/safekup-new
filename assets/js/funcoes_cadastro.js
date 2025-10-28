@@ -1,6 +1,3 @@
-/*********************     Funções da tela de cadastro de Tipo de Banco de Dados       ***********************************************************/
-// Função cadastrar Tipo de Banco de Dados
-
 function cadastrar_so() {
 
 	if ($('#nome_so').val() == "" || $('#plataforma').val() == "") {
@@ -11,17 +8,12 @@ function cadastrar_so() {
 	} else {
 		$('#cad_so').attr('disabled', true);
 		$.post('cadastrar_types.php', { nome_so: $('#nome_so').val(), plataforma: $('#plataforma').val() }, function (data) {
-
 			if (data == 'ja_existe_so') {
-
 				alertify.warning('Já existe um Tipo de Banco de Dados cadastrado com este nome!');
 				return;
-
 			} else if (data == 'erro_ao_cadastrar') {
-
 				alertify.error('Erro ao cadastrar o Tipo de Banco de Dados!');
 				return;
-
 			} else if (data == 'cadastro_realizado_com_sucesso') {
 
 				alertify.success('Cadastro realizado com sucesso!');
@@ -34,14 +26,10 @@ function cadastrar_so() {
 					window.location.href = '/safekup/php/database-types/cadastro_types.php';
 					return;
 				}, 1000);
-
 			}
-
 		});
 	}
 }
-
-// Função Limpar dados do formulario
 
 function limpar_so() {
 
@@ -50,26 +38,10 @@ function limpar_so() {
 	$('#plataforma').selectpicker('refresh');
 }
 
-/*********************************************************************************************************************************************/
-
-
-/*********************     Funções da tela de cadastro de Documentos     *********************************************************************/
-
-// Funcao Limpar
 function limpar() {
-
 	$('#nome_documento').val("");
 	$('#sos').val("");
-
 }
-// Funcao limpar
-
-
-/*******************************************************************************************************************************************/
-
-/*********************     Funções da tela de cadastro de Usuários     *********************************************************************/
-
-// Função para cadastrar usuários
 
 function cadastrar_usuario() {
 
@@ -85,7 +57,7 @@ function cadastrar_usuario() {
 
 	} else {
 		$('#cadastrar_usuario').attr('disabled', true);
-		//Enviando os dados para o servidor
+
 		$.post('cadastrar_usuario.php', { nome_usuario: $('#nome_usuario').val(), login: $('#login').val(), setor: $('#setor').val(), senha: $('#senha').val(), usuario_email: $('#usuario_email').val(), status: $('#status').val() }, function (data) {
 
 			if (data == 'ja_existe_login') {
@@ -119,7 +91,6 @@ function cadastrar_usuario() {
 		});
 	}
 }
-// Funcao limpar formulario
 
 function limpar_usu() {
 
@@ -135,9 +106,6 @@ function limpar_usu() {
 
 
 }
-/********************************************************************************************************************************************/
-
-// Função para cadastrar ssh
 
 function cadastrar_ssh() {
 
@@ -153,7 +121,7 @@ function cadastrar_ssh() {
 
 	} else {
 		$('#cadastrar_ssh').attr('disabled', true);
-		//Enviando os dados para o servidor
+
 		$.post('cadastrar_ssh.php', { ssh_ip: $('#ssh_ip').val(), ssh_user: $('#ssh_user').val(), ssh_pass: $('#ssh_pass').val(), ssh_status: $('#ssh_status').val() }, function (data) {
 
 			if (data.sucesso == 'ja_existe_login') {
@@ -166,7 +134,7 @@ function cadastrar_ssh() {
 				alertify.success('Cadastro realizado com sucesso!');
 				$('#ssh_ip').val("");
 				$('#ssh_user').val("");
-				$('#ssh_pass').val("");							
+				$('#ssh_pass').val("");
 				$('#confirm_ssh').val("");
 				$('#ssh_status').val("");
 				$('#ssh_status').trigger("chosen:updated");
@@ -184,7 +152,6 @@ function cadastrar_ssh() {
 		});
 	}
 }
-// Funcao limpar formulario
 
 function limpar_usu() {
 
@@ -200,18 +167,12 @@ function limpar_usu() {
 
 
 }
-/********************************************************************************************************************************************/
-
-/*********************     Funções da tela de cadastro de Setor     *************************************************************************/
-
-// Funcao para limpar o formulario
 
 function limpar_app() {
 	$('#nome_app').val("");
 	$('#descricao_app').val("")
 }
 
-// Funcao cadastrar setor
 
 function cadastrar_app() {
 
@@ -233,7 +194,7 @@ function cadastrar_app() {
 
 				alertify.success('Cadastro realizado com sucesso!');
 				$('#app_nome').val("");
-				$('#descricao_app').val("");				
+				$('#descricao_app').val("");
 				setTimeout(function () {
 					window.location.href = '/safekup/php/database-app/database-app.php';
 					return;
@@ -249,10 +210,6 @@ function cadastrar_app() {
 		})
 	}
 }
-/********************************************************************************************************************************************/
-/**************************************Funções da tela de cadastro de Computadores **********************************************************/
-
-
 
 function cadastrar_bd() {
 
@@ -321,7 +278,6 @@ function cadastrar_bd() {
 }
 
 
-
 function limpar_comp() {
 
 	$('#bd_id').val("");
@@ -362,13 +318,6 @@ function limpar_comp() {
 
 
 }
-
-
-/*************************************************************************************************************************************************/
-/************************************* Funcoes da Tela de Associar Documentos/Computador ****************************************************/
-
-
-/************************************************* Funcao da Tela de Cadastro de SMTP*********************************************************/
 
 function cadastrar_smtp() {
 
@@ -412,8 +361,6 @@ function cadastrar_smtp() {
 }
 
 
-
-/************************************************* Funções da Tela de Cadastro de Servidores de Backup *********************************************/
 function cadastrar_servidor() {
 
 	if ($('#servidor_nome').val() == "" || $('#servidor_ip').val() == "" || $('#servidor_plataforma').val() == "" || $('#servidor_user_privilegio').val() == "" || $('#servidor_senha_acesso').val() == ""
@@ -452,6 +399,47 @@ function cadastrar_servidor() {
 				$('.gif').prop('hidden', false);
 				setTimeout(function () {
 					window.location.href = '/safekup/php/servidores/servidores.php';
+					return;
+				}, 1000);
+			} else {
+				alertify.error('Erro ao realizar o cadastro!');
+				return;
+			}
+		});
+	}
+}
+
+function cadastrar_restore() {
+
+	if ($('#servidor_nome').val() == "" || $('#servidor_ip').val() == "") {
+
+		alertify.error('Preencha todos os campos!');
+		return;
+
+	} else {
+
+		$('#cad_servidor').attr('disabled', true);
+		$('#cancelar').attr('disabled', true);
+
+		$.post('cadastrar_restore.php', { restore_nome: $('#restore_nome').val(), restore_ip: $('#restore_ip').val() }).done(function (data) {
+
+			if (data == "ja_existe") {
+				alertify.error('Já existe este servidor cadastrado em nossa Base de Dados');
+				$('#cad_servidor').attr('disabled', false);
+				$('#cancelar').attr('disabled', false);
+				return;
+
+			} else if (data == "true") {
+
+				$('#cad_servidor').attr('disabled', false);
+				$('#cancelar').attr('disabled', false);
+				alertify.success('Cadastro realizado com sucesso!');
+				$('#restore_nome').val("");
+				$('#restore_ip').val("");
+
+				$('.gif').prop('hidden', false);
+				setTimeout(function () {
+					window.location.href = '/safekup/php/restore/restore.php';
 					return;
 				}, 1000);
 			} else {

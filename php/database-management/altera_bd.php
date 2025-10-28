@@ -1,6 +1,6 @@
 <?php
-require_once ("../painel/painel.php");
-require_once ("../conexao/conexao.php");
+require_once("../painel/painel.php");
+require_once("../conexao/conexao.php");
 
 
 if (isset($_GET['bd_id'])) {
@@ -16,10 +16,10 @@ if (isset($_GET['bd_id'])) {
 
 ?>
 
-<div class="container" style="width:1350px;">
-<div class="page-header">
-  <h1>Alterar Cadastro de Banco de Dados</h1>
-</div>
+<div class="container">
+  <div class="page-header">
+    <h1>Alterar Cadastro de Banco de Dados</h1>
+  </div>
   <div class="col-xs-12 col-sm-8" style="margin-left:210px;">
     <div class="widget-box">
       <div class="widget-header">
@@ -102,8 +102,9 @@ if (isset($_GET['bd_id'])) {
           </center>
           <br>
           <div class="col-sm-12" style="margin-left:10px;">
-            <label onclick="marca_dias_semana();" class="checkbox-inline"> <input type="checkbox" id="todos_os_dias" class="ace checkbox"><span
-                class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"> Todos os
+            <label onclick="marca_dias_semana();" class="checkbox-inline"> <input type="checkbox" id="todos_os_dias"
+                class="ace checkbox"><span class="lbl"><span class="lbl"><span class="lbl"><span class="lbl"><span
+                        class="lbl"> Todos os
                         dias</span></label>
             <label class="checkbox-inline"><input type="checkbox" id="dia0" class="ace checkbox"><span
                 class="lbl">Domingo</span></label>
@@ -165,7 +166,7 @@ if (isset($_GET['bd_id'])) {
                 <option value="1">1x</option>
                 <option value="2">2x</option>
                 <option value="3">3x</option>
-                <option value="3">4x</option>
+                <option value="4">4x</option>
               </select>
 
             </div>
@@ -217,6 +218,23 @@ if (isset($_GET['bd_id'])) {
           </div>
           <hr>
         </div>
+        <div class="row">
+        <div class="form-group col-md-4">
+              <label data-rel="popover" data-trigger="hover" data-placement="bottom"
+                title="Escolha para qual servidor o backup será enviado">Servidor de Restore</label>
+              <select id="restore_id" class="chosen-select form-control">
+                <option value="">Selecione</option>
+                <?php
+                $sql = mysqli_query($conexao, "SELECT restore_id,restore_nome FROM restores ORDER BY restore_id");
+                while ($servidor = mysqli_fetch_array($sql)) {
+                  echo "<option value='$servidor[restore_id]'>$servidor[restore_nome]</option>";
+                }
+                ?>
+              </select>
+            </div>
+
+          </div>
+          <hr>
         <center>
           <button type="button" class="btn btn-primary" onclick="altera_computador()" id="alterar_comp">ALTERAR</button>
           <a type="button" id="cancelar" class="btn btn-default" href="db_management.php"> VOLTAR </a>

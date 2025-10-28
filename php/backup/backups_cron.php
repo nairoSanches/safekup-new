@@ -4,12 +4,12 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Incluir arquivos necessários
-include ('/opt/lampp/htdocs/safekup/php/conexao/conexao.php');
-include ('/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php');
-require_once ('/opt/lampp/htdocs/safekup/php/include/encryption.inc.php');
-require_once ('/opt/lampp/htdocs/safekup/php/include/emailsender.inc.php');
-require_once ('/opt/lampp/htdocs/safekup/php/include/sendticketglpi.inc.php');
-require_once ('/opt/lampp/htdocs/safekup/vendor/autoload.php');
+include('/opt/lampp/htdocs/safekup/php/conexao/conexao.php');
+include('/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php');
+require_once('/opt/lampp/htdocs/safekup/php/include/encryption.inc.php');
+require_once('/opt/lampp/htdocs/safekup/php/include/emailsender.inc.php');
+require_once('/opt/lampp/htdocs/safekup/php/include/sendticketglpiSingle.inc.php');
+require_once('/opt/lampp/htdocs/safekup/vendor/autoload.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -20,7 +20,7 @@ $glpiClient = new GlpiClient();
 $smtp_email_admin = 'safekup.hu-ufsc@ebserh.gov.br';
 $emailDestinatarios = [
     'nairo.sanches@ebserh.gov.br'/*,
-    'amilton.figueredo@ebserh.gov.br'*/
+'amilton.figueredo@ebserh.gov.br'*/
 ];
 
 
@@ -79,11 +79,50 @@ switch ($dia_semana) {
 // Pegando hora do backup
 $hora = date("H");
 $hora_aux = intval($hora);
+$intervaloEntreBackups = 30;
+$contador = 0;
 
 // Consultar as informações do banco de dados
-$sql = "SELECT A.bd_id, A.bd_nome_usuario, A.bd_login, A.bd_senha, A.bd_ip, A.bd_porta, A.bd_tipo, A.bd_hora_backup, A.bd_backup_ativo, B.tipo_nome, A.bd_ssh, A.bd_container, A.bd_recorrencia 
-        FROM db_management A, tipo B
-        WHERE A.bd_backup_ativo = 'SIM' AND A.bd_tipo = B.tipo_id AND A.$data_aux = 1";
+
+$sql = "
+SELECT 
+    A.bd_id,
+    A.bd_nome_usuario,
+    A.bd_login,
+    A.bd_senha,
+    A.bd_ip,
+    A.bd_porta,
+    A.bd_tipo,
+    A.bd_hora_backup,
+  
+    LPAD(
+        CASE 
+            WHEN A.bd_tipo = 1 THEN 0 + (MOD(A.bd_id, 7) * 7)  
+            WHEN A.bd_tipo = 2 THEN 1 + (MOD(A.bd_id, 7) * 7) 
+            WHEN A.bd_tipo = 3 THEN 2 + (MOD(A.bd_id, 7) * 7)  
+            ELSE 9
+        END
+    , 2, '0') AS bd_hora_backup_intercalada,
+    
+    A.bd_backup_ativo,
+    B.tipo_nome,
+    A.bd_ssh,
+    A.bd_container,
+    A.bd_recorrencia,
+    A.bd_id_glpi
+
+FROM 
+    db_management A
+JOIN 
+    tipo B ON A.bd_tipo = B.tipo_id
+WHERE 
+    A.$data_aux = 1  AND    
+    A.bd_backup_ativo = 'SIM' 
+ 
+ORDER BY 
+    bd_hora_backup_intercalada, A.bd_tipo, A.bd_id;
+";
+
 
 $result = mysqli_query($conexao, $sql);
 
@@ -93,16 +132,18 @@ if ($result && mysqli_num_rows($result) > 0) {
         $bd_recorrencia = intval($row['bd_recorrencia']);
 
         $executar_backup = false;
-         
-        if ($bd_recorrencia == 1 && $hora_aux == $bd_hora_backup) {
+
+        if ($bd_recorrencia == 1 && $hora_aux == 3) {
             $executar_backup = true;
-        } elseif ($bd_recorrencia == 2 && ($hora_aux == $bd_hora_backup || $hora_aux == 9)) {
+        } elseif ($bd_recorrencia == 2 && in_array($hora_aux, [6, 9, 15])) {
             $executar_backup = true;
-        } elseif ($bd_recorrencia == 3 && ($hora_aux == $bd_hora_backup || $hora_aux == 9 || $hora_aux == 15)) {
+        } elseif ($bd_recorrencia == 3 && in_array($hora_aux, [6, 9, 15, 18])) {
             $executar_backup = true;
-        } elseif ($bd_recorrencia == 4 && ($hora_aux == $bd_hora_backup || $hora_aux == 9 || $hora_aux == 15 || $hora_aux == 21)) {
+        } elseif ($bd_recorrencia == 4 && in_array($hora_aux, [3, 6, 9, 15, 18, 21])) {
             $executar_backup = true;
         }
+
+ 
 
         if ($executar_backup) {
             $nameTypeDB = $row['tipo_nome'];
@@ -127,7 +168,7 @@ if ($result && mysqli_num_rows($result) > 0) {
             }
 
             // Nome do arquivo de backup
-            $backup_file = $backup_dir . '/backup_' . date('Y-m-d_H-i-s') . '.sql';
+            $backup_file = $backup_dir . '/backup_' . date('Y-m-d_H-i-s') . '.zst';
 
             // Captura o tempo de início
             $tempo_inicio = time();
@@ -160,9 +201,8 @@ if ($result && mysqli_num_rows($result) > 0) {
                 }
             }
 
-            // Comando mysqldump ou pg_dump
             if ($nameTypeDB == "MYSQL") {
-                // Comando MySQL
+
                 if ($ssh_tunnel == true) {
                     $dump_command = "sshpass -p '$ssh_pass' ssh -o StrictHostKeyChecking=no $ssh_user@$ssh_ip "
                         . "\"echo '$ssh_pass' | sudo -S docker exec -i $ssh_container sh -c 'mysqldump -h $db_host -P $db_port -u root -p'$db_password' $db_name' > /tmp/mysqldump.sql\" && "
@@ -170,60 +210,84 @@ if ($result && mysqli_num_rows($result) > 0) {
                 } else {
                     $dump_command = "/opt/lampp/bin/mysqldump -h $db_host -P $db_port -u $db_user -p'$db_password' $db_name > $backup_file 2>&1";
                 }
-            } else if ($nameTypeDB == "POSTGRESQL") {
-                // Comando PostgreSQL
+
+            } else if ($nameTypeDB == "MARIADB") {
+                $dump_options = "--single-transaction --quick --compress";
+
                 if ($ssh_tunnel == true) {
-                    $dump_command = "sshpass -p '$ssh_pass' ssh -o StrictHostKeyChecking=no $ssh_user@$ssh_ip "
-                        . "\"echo '$ssh_pass' | sudo -S docker exec -i $ssh_container sh -c '/usr/bin/pg_dump -h $db_host -p $db_port -U $db_user $db_name' > $backup_file 2>&1";
+                    $dump_command = "HOME=/tmp sshpass -p '$ssh_pass' ssh -o StrictHostKeyChecking=no $ssh_user@$ssh_ip "
+                        . "\"echo '$ssh_pass' | sudo -S docker exec -i $ssh_container sh -c 'mariadb-dump $dump_options -h $db_host -P $db_port -u root -p'$db_password' $db_name' > /tmp/mysqldump.sql\" && "
+                        . "sshpass -p '$ssh_pass' scp $ssh_user@$ssh_ip:/tmp/mysqldump.sql $backup_file 2>&1";
                 } else {
-                    
-                    $dump_command = "PGPASSWORD=\"$db_password\" /usr/bin/pg_dump -h $db_host -p $db_port -U $db_user \"$db_name\" > \"$backup_file\" 2>&1";
+                    $dump_command = "/opt/lampp/bin/mysqldump $dump_options -h $db_host -P $db_port -u $db_user -p'$db_password' $db_name > $backup_file 2>&1";
                 }
-              
-            }         
+            } else if ($nameTypeDB == "POSTGRESQL") {
+                $dump_options = "--no-synchronized-snapshots --encoding=UTF8 --serializable-deferrable --lock-wait-timeout=5s";
+                $pg_options = "PGOPTIONS='--client-min-messages=warning --work-mem=1MB'";
+                $exclude_tables = ($db_name === "cortex")  ? "--exclude-table=patologia.bk_* --exclude-table=public.bk_*"
+  : "";
 
-            // Executar o comando mysqldump ou pg_dump e capturar exceções
+                if ($ssh_tunnel == true) {
+                    $dump_command = "HOME=/tmp sshpass -p '$ssh_pass' ssh -o StrictHostKeyChecking=no $ssh_user@$ssh_ip "
+                        . "\"echo '$ssh_pass' | sudo -S docker exec -i $ssh_container sh -c '"
+                        . "env PGOPTIONS=\\\"--client-min-messages=warning --work-mem=1MB\\\" "
+                        . "PGPASSWORD=\\\"$db_password\\\" "
+                        . "nice -n 19 ionice -c 3 -n 7 /usr/bin/pg_dump -Fc $dump_options "
+                        . "-h $db_host -p $db_port -U $db_user $db_name "
+                        . "| zstd -T3 -3 -o /tmp/pgdump.dump.zst && chmod 644 /tmp/pgdump.dump.zst'\" && "
+                        . "sshpass -p '$ssh_pass' scp $ssh_user@$ssh_ip:/tmp/pgdump.dump.zst $backup_file 2>&1 && "
+                        . "sshpass -p '$ssh_pass' ssh $ssh_user@$ssh_ip 'rm -f /tmp/pgdump.dump.zst'";
+                } else {
+                    $dump_command = "env PGOPTIONS='--client-min-messages=warning --work-mem=1MB' "
+                        . "PGPASSWORD=\"$db_password\" "
+                        . "nice -n 19 ionice -c 3 -n 7 /usr/bin/pg_dump -Fc $dump_options $exclude_tables "
+                        . "-h $db_host -p $db_port -U $db_user \"$db_name\" "
+                        . "| zstd -T3 -3 -o \"$backup_file\" && chmod 644 \"$backup_file\" 2>&1";
+                }
+            }
+
             exec($dump_command, $output, $return_var);
-
 
             $tempo_fim = time();
             $tempo_decorrido = $tempo_fim - $tempo_inicio;
 
-            // Verificar se o dump foi bem-sucedido
             if ($return_var === 0 and file_exists($backup_file)) {
-                // Compactar o arquivo de backup
-                $zip_file = $backup_file . '.zip';
-                $zip_command = "zip $zip_file $backup_file";
-                exec($zip_command, $output_zip, $return_var_zip);
+                $return_var_zip = 0;
+                $data_execucao = date('Y-m-d H:i:s');
+                $status = 'OK';
+                $arquivo_backup = $backup_file;
 
-                // Verificar se a compactação foi bem-sucedida
+                $tamanho_arquivo = filesize($arquivo_backup);
+                if (file_exists($backup_file)) {
+
+                    $tamanho_arquivo = filesize($backup_file);
+                    if (!empty($row['bd_id_glpi'])) {
+                        $bdIdGlpi = $row['bd_id_glpi'];
+                        $tamanho_mb = round($tamanho_arquivo / (1024 * 1024));
+                        $data_backup = date('Y-m-d H:i:s', $tempo_fim);
+                        try {
+                            $resultGlpi = $glpiClient->updateDatabase($bdIdGlpi, $tamanho_mb, $data_backup);
+                            echo "Banco de dados GLPI ID {$bdIdGlpi} atualizado com sucesso. Tamanho: {$tamanho_mb}MB\n";
+                        } catch (Exception $e) {
+                            echo "Erro ao atualizar banco no GLPI: " . $e->getMessage() . "\n";
+                        }
+                    }
+                }
                 if ($return_var_zip === 0) {
-                    // Remover o arquivo de backup original
-                    unlink($backup_file);
-
-                    // Opcional: Limpar arquivos de backup antigos, mantenha apenas os X mais recentes
-                    $files = glob("$backup_dir/*.zip");
+                    //unlink($backup_file);
+                    $files = glob("$backup_dir/*.zst");
                     usort($files, function ($a, $b) {
                         return filemtime($b) - filemtime($a);
                     });
-
-                    $keep_files = 50; // Número de arquivos de backup a manter
+                    $keep_files = 90;
                     for ($i = $keep_files; $i < count($files); $i++) {
                         unlink($files[$i]);
                     }
 
-                    // Registro de sucesso na tabela de histórico
-                    $data_execucao = date('Y-m-d H:i:s');
-                    $status = 'OK';
-                    $arquivo_backup = $zip_file;
+                    $descricao = isset($descricao) ? $descricao : '';
 
-                    $tamanho_arquivo = filesize($arquivo_backup);
-
-                   /* $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_execucao, status, arquivo_backup)
-                                  VALUES ('$bd_nome_usuario', '$db_host', {$row['bd_id']}, '$data_execucao', '$status', '$arquivo_backup')";*/
-
-$insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_execucao, status, arquivo_backup, tempo_decorrido, tamanho_arquivo, descricao)
-              VALUES ('$bd_nome_usuario', '$db_host', {$row['bd_id']}, '$data_execucao', '$status', '$arquivo_backup', $tempo_decorrido, '$tamanho_arquivo', '$descricao')";              
+                    $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_execucao, status, arquivo_backup, tempo_decorrido, tamanho_arquivo, descricao)
+              VALUES ('$bd_nome_usuario', '$db_host', {$row['bd_id']}, '$data_execucao', '$status', '$arquivo_backup', $tempo_decorrido, '$tamanho_arquivo', '$descricao')";
 
                     if (mysqli_query($conexao, $insert_sql)) {
                         echo "Registro inserido com sucesso na tabela de histórico.\n";
@@ -239,7 +303,7 @@ $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_
                     logAndDisplay("Data e hora de fim: " . date('Y-m-d H:i:s', $tempo_fim));
                     logAndDisplay("Tempo decorrido (segundos): $tempo_decorrido");
 
-                    logAndDisplay("Backup realizado com sucesso em $zip_file");
+                    logAndDisplay("Backup realizado com sucesso em $arquivo_backup ");
 
                     // Enviar email de sucesso de backup
                     $mailer = new PHPMailer(true);
@@ -258,7 +322,7 @@ $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_
                         $mailer->setFrom($smtp_email_admin, 'Safekup Admin');
                         $mailer->addAddress($smtp_email_admin);
                         $mailer->Subject = "Backup Realizado com Sucesso";
-                        $mailer->Body = "O backup do banco de dados $db_name foi realizado com sucesso no host $db_host.\nArquivo: $zip_file";
+                        $mailer->Body = "O backup do banco de dados $db_name foi realizado com sucesso no host $db_host.\nArquivo: $arquivo_backup ";
 
                         // Enviar email
                         $mailer->send();
@@ -284,19 +348,6 @@ $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_
                 $data_execucao = date('Y-m-d H:i:s');
                 $status = 'Erro';
 
-              /*  $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_execucao, status)
-                              VALUES ('$bd_nome_usuario', '$db_host', {$row['bd_id']}, '$data_execucao', '$status')";
-
-                if (mysqli_query($conexao, $insert_sql)) {
-                    echo "Registro de erro inserido com sucesso na tabela de histórico.\n";
-                } else {
-                    echo "Erro ao inserir registro de erro na tabela de histórico: " . mysqli_error($conexao) . "\n";
-                }*/
-
-                logAndDisplay("Erro ao realizar o backup");
-                logAndDisplay("Saída do comando:");
-                logAndDisplay(implode("\n", $output));
-
                 // Enviar email de erro de backup
                 $db_host = ($db_host ? $db_host : 'N&atilde;o Informado');
 
@@ -309,26 +360,28 @@ $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_
                     $emailSender->enviarEmail($destinatario, $assunto, $mensagem);
                 }
 
-
+                $response = '';
                 try {
-                    $glpiClient = new GlpiClient();
-                    $response = $glpiClient->openTicket($assunto, $mensagem);
-                    print_r($response);
+                    // $glpiClient = new GlpiClient();
+                    // $response = $glpiClient->openTicket($assunto, $mensagem);
+                    //print_r($response);
                 } catch (Exception $e) {
                     echo 'Exceção capturada: ', $e->getMessage(), "\n";
                 }
 
                 $insert_sql = "INSERT INTO historico_dumps (bd_nome_usuario, bd_ip, bd_id, data_execucao, status, arquivo_backup, tempo_decorrido, tamanho_arquivo, descricao)
-                VALUES ('$bd_nome_usuario', '$db_host', {$row['bd_id']}, '$data_execucao', '$status', '$arquivo_backup', $tempo_decorrido, '$tamanho_arquivo', '$response')";              
-  if (mysqli_query($conexao, $insert_sql)) {
-    echo "Registro de erro inserido com sucesso na tabela de histórico.\n";
-} else {
-    echo "Erro ao inserir registro de erro na tabela de histórico: " . mysqli_error($conexao) . "\n";
-}
+                VALUES ('$bd_nome_usuario', '$db_host', {$row['bd_id']}, '$data_execucao', '$status', '$arquivo_backup', $tempo_decorrido, '0', '$response')";
+
+                if (mysqli_query($conexao, $insert_sql)) {
+                    // echo "Registro de erro inserido com sucesso na tabela de histórico.\n";
+                } else {
+                    // echo "Erro ao inserir registro de erro na tabela de histórico: " . mysqli_error($conexao) . "\n";
+                }
 
             }
 
         }
+        sleep($intervaloEntreBackups);
     }
 } else {
     echo "Nenhuma base de dados encontrada para Dump\n";

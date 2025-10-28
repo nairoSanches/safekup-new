@@ -1,0 +1,487 @@
+Restore iniciado em 2025-05-20 16:48:29
+Iniciando restore da base: solicitacao_de_usuario às 2025_05_20_16-48-29
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/solicitacao_de_usuario/backup_2025-05-20_16-00-01.zst
+ERRO: Falha no restore do banco RESTO_solicitacao_de_usuario.
+Restore encerrado com erro em 2025-05-20 16:48:35
+Restore executado com sucesso em 2025-05-20 16:48:35
+Restore finalizado em 2025-05-20 16:48:35
+Restore iniciado em 2025-05-20 16:50:38
+Iniciando restore da base: solicitacao_de_usuario às 2025_05_20_16-50-38
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/solicitacao_de_usuario/backup_2025-05-20_16-00-01.zst
+ERRO: Falha no restore do banco RESTO_solicitacao_de_usuario.
+Restore encerrado com erro em 2025-05-20 16:50:42
+Restore executado com sucesso em 2025-05-20 16:50:42
+Restore finalizado em 2025-05-20 16:50:42
+Restore iniciado em 2025-06-01 02:00:01
+Iniciando restore da base: fapis às 2025_06_01_02-00-01
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/fapis/backup_2025-05-31_21-10-32.zst
+ERRO: Falha no restore do banco RESTO_fapis.
+Restore encerrado com erro em 2025-06-01 02:00:02
+Iniciando restore da base: cortex às 2025_06_01_02-00-02
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-05-31_21-11-06.zst
+❌ Falha ao descompactar: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-05-31_21-11-06.zst
+Comando executado: unzstd -f '/DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-05-31_21-11-06.zst' 2>&1
+Código de retorno: 1
+Saída do unzstd:
+zstd: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-05-31_21-11-06: Permission denied
+**************
+ERRO durante o restore da base: cortex
+Arquivo de backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-05-31_21-11-06.zst
+Arquivo de descompatado: 
+Motivo: Falha ao descompactar arquivo .zst
+**************
+Iniciando restore da base: intranet_novo às 2025_06_01_02-00-02
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/intranet_novo/backup_2025-05-31_21-18-20.zst
+ERRO: Falha no restore do banco RESTO_intranet_novo.
+Restore encerrado com erro em 2025-06-01 02:02:30
+Iniciando restore da base: patologia_exame às 2025_06_01_02-02-30
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/patologia_exame/backup_2025-05-31_21-20-05.zst
+ERRO: Falha no restore do banco RESTO_patologia_exame.
+Restore encerrado com erro em 2025-06-01 02:02:33
+Iniciando restore da base: projeto_amanhecer às 2025_06_01_02-02-33
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/projeto_amanhecer/backup_2025-05-31_21-20-39.zst
+ERRO: Falha no restore do banco RESTO_projeto_amanhecer.
+Restore encerrado com erro em 2025-06-01 02:02:34
+Iniciando restore da base: sgv às 2025_06_01_02-02-34
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/sgv/backup_2025-05-31_21-21-11.zst
+ERRO: Falha no restore do banco RESTO_sgv.
+Restore encerrado com erro em 2025-06-01 02:03:39
+Iniciando restore da base: solicitacao_de_usuario às 2025_06_01_02-03-39
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/solicitacao_de_usuario/backup_2025-05-31_21-22-22.zst
+ERRO: Falha no restore do banco RESTO_solicitacao_de_usuario.
+Restore encerrado com erro em 2025-06-01 02:03:43
+Iniciando restore da base: estatisticas às 2025_06_01_02-03-43
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/estatisticas/backup_2025-05-31_21-22-56.zst
+ERRO: Falha no restore do banco RESTO_estatisticas.
+Restore encerrado com erro em 2025-06-01 02:03:43
+Iniciando restore da base: hu às 2025_06_01_02-03-43
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/hu/backup_2025-05-31_21-23-28.zst
+ERRO: Falha no restore do banco RESTO_hu.
+Restore encerrado com erro em 2025-06-01 02:04:55
+Iniciando restore da base: laudos4 às 2025_06_01_02-04-55
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/laudos4/backup_2025-05-31_21-24-48.zst
+ERRO: Falha no restore do banco RESTO_laudos4.
+Restore encerrado com erro em 2025-06-01 02:07:00
+Iniciando restore da base: rastreamento_prontuarios às 2025_06_01_02-07-00
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/rastreamento_prontuarios/backup_2025-05-31_21-26-10.zst
+ERRO: Falha no restore do banco RESTO_rastreamento_prontuarios.
+Restore encerrado com erro em 2025-06-01 02:08:09
+Iniciando restore da base: agendacirurgica às 2025_06_01_02-08-09
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/agendacirurgica/backup_2025-05-31_18-17-02.zst
+ERRO: Falha no restore do banco RESTO_agendacirurgica.
+Restore encerrado com erro em 2025-06-01 02:08:10
+Restore executado com sucesso em 2025-06-01 02:08:10
+Restore finalizado em 2025-06-01 02:08:10
+Restore iniciado em 2025-07-01 02:00:01
+Iniciando restore da base: fapis às 2025_07_01_02-00-02
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/fapis/backup_2025-06-30_21-12-45.zst
+ERRO: Falha no restore do banco RESTO_fapis.
+Restore encerrado com erro em 2025-07-01 02:00:03
+Iniciando restore da base: cortex às 2025_07_01_02-00-03
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-06-30_21-17-20.zst
+❌ Falha ao descompactar: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-06-30_21-17-20.zst
+Comando executado: unzstd -f '/DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-06-30_21-17-20.zst' 2>&1
+Código de retorno: 1
+Saída do unzstd:
+zstd: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-06-30_21-17-20: Permission denied
+**************
+ERRO durante o restore da base: cortex
+Arquivo de backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-06-30_21-17-20.zst
+Arquivo de descompatado: 
+Motivo: Falha ao descompactar arquivo .zst
+**************
+Iniciando restore da base: intranet_novo às 2025_07_01_02-00-03
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/intranet_novo/backup_2025-06-30_21-14-38.zst
+ERRO: Falha no restore do banco RESTO_intranet_novo.
+Restore encerrado com erro em 2025-07-01 02:02:38
+Iniciando restore da base: patologia_exame às 2025_07_01_02-02-38
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/patologia_exame/backup_2025-06-30_21-21-36.zst
+ERRO: Falha no restore do banco RESTO_patologia_exame.
+Restore encerrado com erro em 2025-07-01 02:02:41
+Iniciando restore da base: projeto_amanhecer às 2025_07_01_02-02-41
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/projeto_amanhecer/backup_2025-06-30_21-00-34.zst
+ERRO: Falha no restore do banco RESTO_projeto_amanhecer.
+Restore encerrado com erro em 2025-07-01 02:02:42
+Iniciando restore da base: sgv às 2025_07_01_02-02-42
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/sgv/backup_2025-06-30_21-01-38.zst
+ERRO: Falha no restore do banco RESTO_sgv.
+Restore encerrado com erro em 2025-07-01 02:03:50
+Iniciando restore da base: solicitacao_de_usuario às 2025_07_01_02-03-50
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/solicitacao_de_usuario/backup_2025-06-30_21-04-29.zst
+ERRO: Falha no restore do banco RESTO_solicitacao_de_usuario.
+Restore encerrado com erro em 2025-07-01 02:03:54
+Iniciando restore da base: estatisticas às 2025_07_01_02-03-54
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/estatisticas/backup_2025-06-30_21-07-34.zst
+ERRO: Falha no restore do banco RESTO_estatisticas.
+Restore encerrado com erro em 2025-07-01 02:03:55
+Iniciando restore da base: hu às 2025_07_01_02-03-55
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/hu/backup_2025-06-30_21-13-17.zst
+ERRO: Falha no restore do banco RESTO_hu.
+Restore encerrado com erro em 2025-07-01 02:05:07
+Iniciando restore da base: laudos4 às 2025_07_01_02-05-07
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/laudos4/backup_2025-06-30_21-03-00.zst
+ERRO: Falha no restore do banco RESTO_laudos4.
+Restore encerrado com erro em 2025-07-01 02:07:22
+Iniciando restore da base: rastreamento_prontuarios às 2025_07_01_02-07-22
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/rastreamento_prontuarios/backup_2025-06-30_21-05-03.zst
+ERRO: Falha no restore do banco RESTO_rastreamento_prontuarios.
+Restore encerrado com erro em 2025-07-01 02:08:39
+Iniciando restore da base: agendacirurgica às 2025_07_01_02-08-39
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/agendacirurgica/backup_2025-06-30_18-07-43.zst
+ERRO: Falha no restore do banco RESTO_agendacirurgica.
+Restore encerrado com erro em 2025-07-01 02:08:40
+Restore executado com sucesso em 2025-07-01 02:08:40
+Restore finalizado em 2025-07-01 02:08:40
+Restore iniciado em 2025-08-01 02:00:01
+<br />
+<b>Parse error</b>:  syntax error, unexpected token &quot;.&quot; in <b>/opt/lampp/htdocs/safekup/php/include/encryption.inc.php</b> on line <b>14</b><br />
+Restore executado com sucesso em 2025-08-01 02:00:01
+Restore finalizado em 2025-08-01 02:00:01
+Restore iniciado em 2025-09-01 02:00:01
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: fapis às 2025_09_01_02-00-02
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/fapis/backup_2025-08-31_21-16-28.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_fapis.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:00:03
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: cortex às 2025_09_01_02-00-03
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-08-31_21-21-54.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+❌ Falha ao descompactar: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-08-31_21-21-54.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Comando executado: unzstd -f '/DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-08-31_21-21-54.zst' 2>&1
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Código de retorno: 1
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Saída do unzstd:
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+zstd: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-08-31_21-21-54: Permission denied
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+**************
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO durante o restore da base: cortex
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Arquivo de backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-08-31_21-21-54.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Arquivo de descompatado: 
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Motivo: Falha ao descompactar arquivo .zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+**************
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: intranet_novo às 2025_09_01_02-00-03
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/intranet_novo/backup_2025-08-31_21-19-06.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_intranet_novo.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:02:52
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: patologia_exame às 2025_09_01_02-02-52
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/patologia_exame/backup_2025-08-31_21-24-41.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_patologia_exame.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:02:55
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: projeto_amanhecer às 2025_09_01_02-02-55
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/projeto_amanhecer/backup_2025-08-31_21-00-52.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_projeto_amanhecer.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:02:57
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: sgv às 2025_09_01_02-02-57
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/sgv/backup_2025-08-31_21-02-34.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_sgv.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:04:27
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: solicitacao_de_usuario às 2025_09_01_02-04-27
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/solicitacao_de_usuario/backup_2025-08-31_21-05-44.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_solicitacao_de_usuario.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:04:31
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: estatisticas às 2025_09_01_02-04-31
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/estatisticas/backup_2025-08-31_21-10-24.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_estatisticas.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:04:31
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: hu às 2025_09_01_02-04-31
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/hu/backup_2025-08-31_21-17-19.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_hu.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:05:54
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: laudos4 às 2025_09_01_02-05-54
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/laudos4/backup_2025-08-31_21-04-11.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_laudos4.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:08:19
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: rastreamento_prontuarios às 2025_09_01_02-08-19
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/rastreamento_prontuarios/backup_2025-08-31_21-06-37.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_rastreamento_prontuarios.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:09:38
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: agendacirurgica às 2025_09_01_02-09-38
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/agendacirurgica/backup_2025-08-31_18-11-21.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_agendacirurgica.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-09-01 02:09:38
+Restore executado com sucesso em 2025-09-01 02:09:39
+Restore finalizado em 2025-09-01 02:09:39
+Restore iniciado em 2025-10-01 02:00:01
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: fapis às 2025_10_01_02-00-01
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/fapis/backup_2025-09-30_21-13-01.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_fapis.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:00:03
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: cortex às 2025_10_01_02-00-03
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-09-30_21-17-05.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+❌ Falha ao descompactar: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-09-30_21-17-05.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Comando executado: unzstd -f '/DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-09-30_21-17-05.zst' 2>&1
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Código de retorno: 1
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Saída do unzstd:
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+zstd: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-09-30_21-17-05: Permission denied
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+**************
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO durante o restore da base: cortex
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Arquivo de backup: /DBbackup/10.94.61.63/POSTGRESQL/cortex/backup_2025-09-30_21-17-05.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Arquivo de descompatado: 
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Motivo: Falha ao descompactar arquivo .zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+**************
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: intranet_novo às 2025_10_01_02-00-03
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/intranet_novo/backup_2025-09-30_21-14-55.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_intranet_novo.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:02:33
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: patologia_exame às 2025_10_01_02-02-33
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/patologia_exame/backup_2025-09-30_21-17-37.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_patologia_exame.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:02:37
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: projeto_amanhecer às 2025_10_01_02-02-37
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/projeto_amanhecer/backup_2025-09-30_21-00-32.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_projeto_amanhecer.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:02:39
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: sgv às 2025_10_01_02-02-39
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/sgv/backup_2025-09-30_21-01-37.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_sgv.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:03:53
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: solicitacao_de_usuario às 2025_10_01_02-03-53
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/solicitacao_de_usuario/backup_2025-09-30_21-03-47.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_solicitacao_de_usuario.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:03:58
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: estatisticas às 2025_10_01_02-03-58
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/estatisticas/backup_2025-09-30_21-06-51.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_estatisticas.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:03:58
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: hu às 2025_10_01_02-03-58
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/hu/backup_2025-09-30_21-13-33.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_hu.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:05:10
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: laudos4 às 2025_10_01_02-05-10
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/laudos4/backup_2025-09-30_21-02-31.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_laudos4.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:07:13
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: rastreamento_prontuarios às 2025_10_01_02-07-13
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/rastreamento_prontuarios/backup_2025-09-30_21-04-20.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_rastreamento_prontuarios.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:08:24
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Iniciando restore da base: agendacirurgica às 2025_10_01_02-08-24
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Backup: /DBbackup/10.94.61.63/POSTGRESQL/agendacirurgica/backup_2025-09-30_18-07-18.zst
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+ERRO: Falha no restore do banco RESTO_agendacirurgica.
+<br />
+<b>Warning</b>:  file_put_contents(/opt/lampp/htdocs/safekup/php/backup/backup.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/safekup/php/backup/funcoesPhp.php</b> on line <b>48</b><br />
+Restore encerrado com erro em 2025-10-01 02:08:25
+Restore executado com sucesso em 2025-10-01 02:08:25
+Restore finalizado em 2025-10-01 02:08:25

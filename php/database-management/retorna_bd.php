@@ -39,7 +39,8 @@ $json['bd_usuario_adm']	        = $retorna_bd['bd_usuario_adm'];
 $json['bd_backup_ativo']        = $retorna_bd['bd_backup_ativo'];
 $json['bd_ssh']                 = $retorna_bd['bd_ssh'];
 $json['bd_recorrencia']         = $retorna_bd['bd_recorrencia'];
-$json['bd_container']         = $retorna_bd['bd_container'];
+$json['bd_container']           = $retorna_bd['bd_container'];
+$json['bd_id_restore']          = $retorna_bd['bd_id_restore'];
 
 echo json_encode($json);
 
