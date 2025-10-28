@@ -2,7 +2,7 @@
 // Iniciando sessão
 session_start();
 // Recuperando usuario logado
-$usuario = $_SESSION['login'];
+$usuario = isset($_SESSION['login']) ? $_SESSION['login'] : null;
 require_once("../login/verifica_sessao.php");
 ?>
 <!DOCTYPE html>
