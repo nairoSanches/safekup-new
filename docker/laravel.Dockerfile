@@ -1,18 +1,27 @@
-FROM php:8.2-apache
+# laravel.Dockerfile
+FROM php:8.3-apache
 
-# Dependências e extensões PHP necessárias para Laravel + MySQL
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        libzip-dev \
+# 1) Traga o Composer oficial (sem apt)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# 2) Dependências de sistema para extensões
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        git unzip \
+        libzip-dev zlib1g-dev \
         libldap2-dev \
-        unzip \
-        git \
-        composer \
-    && docker-php-ext-install pdo pdo_mysql zip \
-    && docker-php-ext-configure ldap \
-    && docker-php-ext-install ldap \
-    && a2enmod rewrite \
-    && rm -rf /var/lib/apt/lists/*
+    ; \
+    # zip + PDO MySQL
+    docker-php-ext-configure zip; \
+    docker-php-ext-install -j"$(nproc)" pdo pdo_mysql zip; \
+    # LDAP (se der erro de libdir, ver nota abaixo)
+    docker-php-ext-configure ldap; \
+    docker-php-ext-install -j"$(nproc)" ldap; \
+    # Apache
+    a2enmod rewrite; \
+    # limpeza
+    rm -rf /var/lib/apt/lists/*
 
 # Ajusta DocumentRoot para /public e ativa AllowOverride
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
