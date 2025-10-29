@@ -31,6 +31,9 @@ DB_PASSWORD=SEU_SEGREDO
 LDAP_HOST=ldap://seu.ldap
 LDAP_PORT=389
 LDAP_DN=DC=exemplo,DC=gov,DC=br
+LDAP_NETBIOS=EXEMPLO        # Opcional (DOMÍNIO\usuario)
+LDAP_UPN_SUFFIX=exemplo.gov.br  # Opcional (usuario@exemplo.gov.br)
+LDAP_STARTTLS=false             # true para StartTLS no :389
 ```
 
 Gere a APP_KEY:

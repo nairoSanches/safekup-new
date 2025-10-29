@@ -20,9 +20,12 @@ class LoginController extends Controller
             'senha' => 'required|string',
         ]);
 
-        $ldapHost = env('LDAP_HOST');
-        $ldapPort = (int) env('LDAP_PORT', 389);
-        $baseDn   = env('LDAP_DN'); // opcional
+        $ldapHost    = env('LDAP_HOST');
+        $ldapPort    = (int) env('LDAP_PORT', 389);
+        $baseDn      = env('LDAP_DN');
+        $netbios     = env('LDAP_NETBIOS', '');
+        $upnSuffix   = env('LDAP_UPN_SUFFIX', '');
+        $useStartTls = filter_var(env('LDAP_STARTTLS', false), FILTER_VALIDATE_BOOLEAN);
 
         $user = $request->input('login');
         $pass = $request->input('senha');
@@ -34,8 +37,29 @@ class LoginController extends Controller
 
         ldap_set_option($conn, LDAP_OPT_PROTOCOL_VERSION, 3);
         ldap_set_option($conn, LDAP_OPT_REFERRALS, 0);
+        if ($useStartTls) { @ldap_start_tls($conn); }
 
-        if (!@ldap_bind($conn, $user, $pass)) {
+        $candidates = [];
+        $hasDomain = str_contains($user, '@') || str_contains($user, '\\');
+        if ($hasDomain) {
+            $candidates[] = $user;
+        } else {
+            if (!empty($upnSuffix)) {
+                $suffix = str_starts_with($upnSuffix, '@') ? $upnSuffix : ('@' . $upnSuffix);
+                $candidates[] = $user . $suffix;
+            }
+            if (!empty($netbios)) {
+                $candidates[] = $netbios . '\\' . $user;
+            }
+            $candidates[] = $user; // fallback
+        }
+
+        $ok = false;
+        foreach ($candidates as $rdn) {
+            if (@ldap_bind($conn, $rdn, $pass)) { $ok = true; break; }
+        }
+
+        if (!$ok) {
             return back()->withErrors(['login' => 'Usuário ou senha inválidos.']);
         }
 
@@ -50,4 +74,3 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
 }
-
