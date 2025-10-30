@@ -18,7 +18,7 @@ $use_starttls  = filter_var($_ENV['LDAP_STARTTLS'] ?? 'false', FILTER_VALIDATE_B
 $bind_dn       = $_ENV['LDAP_BIND_DN']   ?? '';
 $bind_pass     = $_ENV['LDAP_BIND_PASS'] ?? '';
 $search_attr   = $_ENV['LDAP_SEARCH_ATTR'] ?? 'sAMAccountName';
-$debug_auth    = filter_var($_ENV['AUTH_DEBUG'] ?? 'true', FILTER_VALIDATE_BOOLEAN);
+$debug_auth    = true;//filter_var($_ENV['AUTH_DEBUG'] ?? 'true', FILTER_VALIDATE_BOOLEAN);
 $debug_log     = $_ENV['AUTH_DEBUG_LOG'] ?? __DIR__ . '/../../log/auth.log';
 
 function attemptBind($conn, $rdn, $pass)

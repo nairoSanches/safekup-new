@@ -1,16 +1,23 @@
-version: "3.9"
-
 services:
   safekup:
-    image: php:8.2-apache
+    build:
+      context: .
+      dockerfile: docker/php-apache.Dockerfile
     container_name: safekup-new
     ports:
       - "8081:80"
     volumes:
       - /mnt/c/projetoshu/safekup-new:/var/www/html
+      - ~/secrets/safekup:/etc/safekup:ro
     working_dir: /var/www/html
     environment:
       TZ: America/Sao_Paulo
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(extension_loaded('ldap')?0:1);"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
 
   safekup-laravel:
     build:
@@ -21,7 +28,14 @@ services:
       - "8082:80"
     volumes:
       - ./safekup-laravel:/var/www/html
+      - ~/secrets/safekup:/etc/safekup:ro
     working_dir: /var/www/html
     environment:
       TZ: America/Sao_Paulo
       APACHE_DOCUMENT_ROOT: /var/www/html/public
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(extension_loaded('ldap')?0:1);"]
+      interval: 30s
+      timeout: 5s
+      retries: 5

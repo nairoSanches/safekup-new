@@ -10,8 +10,13 @@ $dotenv->load();
 
 // Retorna um array com as configurações do banco de dados
 return [
-    'DB_HOST' => $_ENV['DB_HOST'],
+/*    'DB_HOST' => $_ENV['DB_HOST'],
     'DB_NAME' => $_ENV['DB_NAME'],
     'DB_USER' => $_ENV['DB_USER'],
-    'DB_PASS' => $_ENV['DB_PASS'],
+    'DB_PASS' => $_ENV['DB_PASS'],*/
+
+    'DB_HOST'=>'10.94.61.126',
+    'DB_USER'=>'adm-backup',
+    'DB_PASS'=>'N@r21s',
+    'DB_NAME'=>'safekup'
 ];
