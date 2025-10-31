@@ -142,10 +142,22 @@ function isCacheValid($ldap_user, $ldap_pass)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $ldap_user = $_POST['login'] ?? '';
+    $domain = '@ebserh.gov.br';
+    $ldap_user = trim($_POST['login'] ?? '');
     $ldap_pass = $_POST['senha'] ?? '';
 
     if (!$ldap_user || !$ldap_pass) {
+        die('dados_invalidos');
+    }
+
+    if (stripos($ldap_user, '@') === false) {
+        $ldap_user = strtolower($ldap_user) . $domain;
+    } else {
+        $usernamePart = strtolower(strtok($ldap_user, '@'));
+        $ldap_user = $usernamePart . $domain;
+    }
+
+    if (!$ldap_user) {
         die('dados_invalidos');
     }
 

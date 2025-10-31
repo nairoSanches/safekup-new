@@ -30,12 +30,15 @@
 
           <!-- Formulário -->
           <form class="mt-8" onsubmit="event.preventDefault(); valida_login();">
-            <label class="block text-sm font-medium text-slate-200">Usuário</label>
+            <label class="block text-sm font-medium text-slate-200">E-mail institucional</label>
             <div class="mt-1 relative">
               <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                 <i class="fa fa-user"></i>
               </span>
-              <input id="login" type="text" autocomplete="username" placeholder="Seu usuário" class="w-full h-16 rounded-lg bg-slate-800/80 border border-slate-700 pl-10 pr-3 text-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <div class="flex items-center">
+                <input id="login" type="text" autocomplete="username" placeholder="nome.sobrenome" class="h-16 w-full rounded-l-lg bg-slate-800/80 border border-slate-700 border-r-0 pl-10 pr-3 text-lg text-slate-100 placeholder-slate-400 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+                <span class="h-16 rounded-r-lg bg-slate-800/80 border border-slate-700 border-l-0 px-4 text-base font-medium text-slate-200 flex items-center">@ebserh.gov.br</span>
+              </div>
             </div>
 
             <label class="block text-sm font-medium text-slate-200 mt-4">Senha</label>

@@ -7,7 +7,15 @@ function valida_login() {
 
     } else {
 
-        $.post('php/login/validar_login.php', { login: $('#login').val(), senha: $('#senha').val() }, function (data) {  
+        const domain = '@ebserh.gov.br';
+        const rawLogin = ($('#login').val() || '').trim();
+        const normalizedLogin = rawLogin
+            ? rawLogin.split('@')[0].toLowerCase() + domain
+            : '';
+
+        $('#login').val(rawLogin.split('@')[0].toLowerCase());
+
+        $.post('php/login/validar_login.php', { login: normalizedLogin, senha: $('#senha').val() }, function (data) {  
                         
 
             if (data == 'usuario_bloqueado') {
