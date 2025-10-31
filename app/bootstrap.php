@@ -34,6 +34,7 @@ function safekup_menu_items(): array
         ['key' => 'ssh', 'label' => 'SSH', 'href' => '/app/ssh.php'],
         ['key' => 'bancos', 'label' => 'Bancos', 'href' => '/app/bancos.php'],
         ['key' => 'usuarios', 'label' => 'Usuários', 'href' => '/app/usuarios.php'],
+        ['key' => 'emails', 'label' => 'E-mails', 'href' => '/app/notificacoes.php'],
         ['key' => 'relatorios', 'label' => 'Relatórios', 'href' => '/app/relatorios.php'],
     ];
 }
