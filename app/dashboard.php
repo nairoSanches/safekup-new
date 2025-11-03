@@ -1,135 +1,30 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/includes/dashboard_metrics.php';
 
 $pdo = safekup_db();
 
-$rangeOptions = [
-    14 => '14 dias',
-    7  => '7 dias',
-    1  => 'Hoje',
-];
-$defaultRange = 1;
+$rangeOptions = safekup_dashboard_range_options();
+$defaultRange = safekup_dashboard_default_range();
 $selectedRange = isset($_GET['range']) ? (int) $_GET['range'] : $defaultRange;
-if (!array_key_exists($selectedRange, $rangeOptions)) {
-    $selectedRange = $defaultRange;
-}
-$rangeDays = $selectedRange;
 
-$dailyStats = [];
-$dailyLabels = [];
-$dailyTotals = [];
-$dailySuccess = [];
-$dailyFailures = [];
-$dailyVolumeMb = [];
-$dailyVolumeBytes = [];
-$totalExecutions = 0;
-$successExecutions = 0;
-$failureExecutions = 0;
-$totalVolumeBytes = 0;
-$successRate = null;
-$failureRate = null;
-$latestDump = null;
-$statsError = null;
-$periodRangeDescription = '';
+$metrics = safekup_dashboard_metrics($pdo, $selectedRange);
+$rangeDays = $metrics['range_days'];
+$period = $metrics['period'];
+$totals = $metrics['totals'];
+$chartTitles = $metrics['chart_titles'];
+$latestDump = $metrics['latest_dump'];
+$hasDailyData = (bool) $metrics['has_data'];
+$statsError = $metrics['error'];
 
-try {
-    $today = new DateTimeImmutable('today');
-    $startDateObj = $rangeDays > 1
-        ? $today->sub(new DateInterval('P' . ($rangeDays - 1) . 'D'))
-        : $today;
-    $startDateParam = $rangeDays === 1
-        ? $startDateObj->format('Y-m-d')
-        : $startDateObj->format('Y-m-d 00:00:00');
-    $periodRangeDescription = $rangeDays === 1
-        ? $today->format('d/m')
-        : sprintf('%s — %s', $startDateObj->format('d/m'), $today->format('d/m'));
+$periodTitle = $period['title'];
+$periodLabel = $period['label'];
+$periodRangeDescription = $period['description'];
+$successRateText = $totals['success_rate_text'];
+$failureRateText = $totals['failure_rate_text'];
+$formattedVolume = $totals['volume_text'];
 
-    if ($rangeDays === 1) {
-        $bucketSelect = "DATE_FORMAT(h.data_execucao, '%Y-%m-%d %H:00:00') AS bucket_ts";
-        $groupByExpression = "DATE_FORMAT(h.data_execucao, '%Y-%m-%d %H')";
-        $whereClause = "DATE(h.data_execucao) = :startDate";
-    } else {
-        $bucketSelect = "DATE(h.data_execucao) AS bucket_ts";
-        $groupByExpression = "DATE(h.data_execucao)";
-        $whereClause = "h.data_execucao >= :startDate";
-    }
-
-    $dailyStatsStmt = $pdo->prepare("
-        SELECT
-            {$bucketSelect},
-            COUNT(*) AS total,
-            SUM(CASE WHEN h.status = 'OK' THEN 1 ELSE 0 END) AS success_count,
-            SUM(CASE WHEN h.status = 'OK' THEN 0 ELSE 1 END) AS failure_count,
-            SUM(COALESCE(h.tamanho_arquivo, 0)) AS total_size_bytes
-        FROM historico_dumps h
-        WHERE {$whereClause}
-        GROUP BY {$groupByExpression}
-        ORDER BY {$groupByExpression}
-    ");
-    $dailyStatsStmt->execute(['startDate' => $startDateParam]);
-    $dailyStats = $dailyStatsStmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($dailyStats as $row) {
-        $bucketDate = new DateTimeImmutable($row['bucket_ts']);
-        $dailyLabels[] = $rangeDays === 1 ? $bucketDate->format('H\h') : $bucketDate->format('d/m');
-        $dailyTotals[] = (int) $row['total'];
-        $dailySuccess[] = (int) $row['success_count'];
-        $dailyFailures[] = (int) $row['failure_count'];
-        $dailyVolumeBytes[] = (float) $row['total_size_bytes'];
-        $dailyVolumeMb[] = round(((float) $row['total_size_bytes']) / 1048576, 2);
-    }
-
-    $totalExecutions = array_sum($dailyTotals);
-    $successExecutions = array_sum($dailySuccess);
-    $failureExecutions = array_sum($dailyFailures);
-    $totalVolumeBytes = array_sum($dailyVolumeBytes);
-    $successRate = $totalExecutions > 0 ? round(($successExecutions / $totalExecutions) * 100, 1) : null;
-    $failureRate = $totalExecutions > 0 ? round(($failureExecutions / $totalExecutions) * 100, 1) : null;
-
-    $latestDumpStmt = $pdo->query("
-        SELECT h.data_execucao, h.status, h.bd_nome_usuario
-        FROM historico_dumps h
-        ORDER BY h.data_execucao DESC
-        LIMIT 1
-    ");
-    $latestDump = $latestDumpStmt->fetch(PDO::FETCH_ASSOC) ?: null;
-} catch (Throwable $exception) {
-    error_log('Erro ao carregar métricas do dashboard: ' . $exception->getMessage());
-    $statsError = 'Não foi possível carregar as métricas dos dumps recentes.';
-    $dailyLabels = [];
-    $dailyTotals = [];
-    $dailySuccess = [];
-    $dailyFailures = [];
-    $dailyVolumeMb = [];
-    $dailyVolumeBytes = [];
-    $totalExecutions = 0;
-    $successExecutions = 0;
-    $failureExecutions = 0;
-    $totalVolumeBytes = 0;
-    $successRate = null;
-    $failureRate = null;
-    $latestDump = null;
-    $periodRangeDescription = '—';
-}
-
-$successRateText = $successRate !== null ? number_format($successRate, 1, ',', '.') . '%' : '—';
-$failureRateText = $failureRate !== null ? number_format($failureRate, 1, ',', '.') . '%' : '—';
-$formattedVolume = safekup_format_size($totalVolumeBytes);
-$hasDailyData = !empty($dailyLabels);
-$periodLabel = $rangeDays === 1 ? 'Hoje' : "Últimos {$rangeDays} dias";
-$periodTitle = $rangeDays === 1 ? 'Atividade de hoje' : "Atividade dos últimos {$rangeDays} dias";
-$executionsChartTitle = $rangeDays === 1 ? 'Execuções totais por hora' : 'Execuções totais por dia';
-$executionsChartSubtitle = $rangeDays === 1
-    ? 'Visualize a distribuição das execuções ao longo do dia selecionado.'
-    : 'Visualize a tendência diária de dumps realizados.';
-$statusChartTitle = $rangeDays === 1 ? 'Sucesso x falha por hora' : 'Sucesso x falha por dia';
-$statusChartSubtitle = $rangeDays === 1
-    ? 'Comparativo horário entre execuções concluídas e com problemas.'
-    : 'Comparativo diário entre execuções concluídas e com problemas.';
-$volumeChartTitle = $rangeDays === 1 ? 'Volume gerado por hora (MB)' : 'Volume gerado por dia (MB)';
-$volumeChartSubtitle = $rangeDays === 1
-    ? 'Soma horária do tamanho dos arquivos produzidos pelos dumps.'
-    : 'Soma diária do tamanho dos arquivos produzidos pelos dumps.';
+$initialMetricsJson = json_encode($metrics, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 
 safekup_render_header('Safekup — Painel', 'dashboard');
 ?>
@@ -144,21 +39,24 @@ safekup_render_header('Safekup — Painel', 'dashboard');
     <section class="rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-2xl shadow-indigo-900/30">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="space-y-2">
-                <h2 class="text-xl font-semibold"><?= safekup_escape($periodTitle); ?></h2>
+                <h2 class="text-xl font-semibold" data-dashboard="period-title"><?= safekup_escape($periodTitle); ?></h2>
                 <p class="text-sm text-slate-300">
                     Consolidação diária das execuções registradas no <em>historico_dumps</em>, incluindo volume gerado
                     e percentual de sucesso.
                 </p>
                 <p class="text-xs uppercase tracking-wide text-slate-500">
-                    Período: <?= safekup_escape($periodRangeDescription); ?>
+                    Período: <span data-dashboard="period-description"><?= safekup_escape($periodRangeDescription); ?></span>
                 </p>
             </div>
-            <form method="get" class="flex flex-wrap gap-2">
+            <form method="get" class="flex flex-wrap gap-2" data-dashboard="range-form">
                 <?php foreach ($rangeOptions as $value => $label): ?>
                     <?php $isActive = $value === $rangeDays; ?>
                     <button type="submit"
                             name="range"
                             value="<?= (int) $value; ?>"
+                            data-dashboard-range-button
+                            data-active-classes="border-indigo-400/70 bg-indigo-500/30 text-white shadow-lg shadow-indigo-900/30"
+                            data-inactive-classes="border-white/10 bg-slate-900/60 text-slate-300 hover:border-indigo-300/60 hover:text-white"
                             class="rounded-full border px-4 py-2 text-sm font-semibold transition <?= $isActive
                                 ? 'border-indigo-400/70 bg-indigo-500/30 text-white shadow-lg shadow-indigo-900/30'
                                 : 'border-white/10 bg-slate-900/60 text-slate-300 hover:border-indigo-300/60 hover:text-white'; ?>">
@@ -173,84 +71,81 @@ safekup_render_header('Safekup — Painel', 'dashboard');
                     <?php endforeach; ?>
                 <?php endif; ?>
             </form>
-            <?php if ($latestDump): ?>
-                <div class="flex flex-col gap-1 rounded-2xl border border-white/10 bg-slate-900/80 px-5 py-4 text-sm text-slate-200">
+            <div class="flex flex-col gap-1 rounded-2xl border border-white/10 bg-slate-900/80 px-5 py-4 text-sm text-slate-200 <?= $latestDump ? '' : 'hidden'; ?>"
+                 data-dashboard="latest-card">
                     <span class="text-xs font-semibold uppercase tracking-wide text-slate-400">Última execução</span>
-                    <span class="text-lg font-semibold text-white">
+                    <span class="text-lg font-semibold text-white" data-dashboard="latest-name">
                         <?= safekup_escape($latestDump['bd_nome_usuario'] ?? ''); ?>
                     </span>
-                    <span class="text-slate-300">
+                    <span class="text-slate-300" data-dashboard="latest-datetime">
                         <?= safekup_format_datetime($latestDump['data_execucao'] ?? null); ?>
                     </span>
-                    <span>
-                        <?= safekup_badge(
-                            ($latestDump['status'] ?? '-') ?: '-',
-                            ($latestDump['status'] ?? '') === 'OK' ? 'success' : 'danger'
-                        ); ?>
+                    <span data-dashboard="latest-status">
+                        <?= $latestDump
+                            ? safekup_badge(
+                                ($latestDump['status'] ?? '-') ?: '-',
+                                ($latestDump['status'] ?? '') === 'OK' ? 'success' : 'danger'
+                            )
+                            : safekup_badge('-', 'default'); ?>
                     </span>
-                </div>
-            <?php endif; ?>
+            </div>
         </div>
 
-        <?php if ($statsError !== null): ?>
-            <div class="mt-6 rounded-xl border border-pink-500/40 bg-pink-500/10 p-4 text-sm text-pink-100">
-                <?= safekup_escape($statsError); ?>
-            </div>
-        <?php else: ?>
-            <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="mt-6 rounded-xl border border-pink-500/40 bg-pink-500/10 p-4 text-sm text-pink-100 <?= $statsError ? '' : 'hidden'; ?>"
+             data-dashboard="error">
+            <span data-dashboard="error-text"><?= safekup_escape($statsError ?? ''); ?></span>
+        </div>
+
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 <?= $statsError ? 'hidden' : ''; ?>"
+             data-dashboard="stats-container">
                 <div class="rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-inner shadow-indigo-900/10">
                     <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Execuções</p>
                     <p class="mt-2 text-3xl font-bold text-white">
-                        <?= number_format($totalExecutions, 0, ',', '.'); ?>
+                        <span data-dashboard="total-executions"><?= safekup_escape($totals['executions_text']); ?></span>
                     </p>
-                    <p class="mt-1 text-xs text-slate-400"><?= safekup_escape($periodLabel); ?></p>
-                    <p class="mt-3 text-sm text-slate-300">Taxa de sucesso: <?= $successRateText; ?></p>
+                    <p class="mt-1 text-xs text-slate-400" data-dashboard="period-label"><?= safekup_escape($periodLabel); ?></p>
+                    <p class="mt-3 text-sm text-slate-300">Taxa de sucesso: <span data-dashboard="success-rate"><?= safekup_escape($successRateText); ?></span></p>
                 </div>
 
                 <div class="rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-inner shadow-green-900/10">
                     <p class="text-xs font-semibold uppercase tracking-wide text-green-300">Sucesso</p>
                     <p class="mt-2 text-3xl font-bold text-green-100">
-                        <?= number_format($successExecutions, 0, ',', '.'); ?>
+                        <span data-dashboard="total-success"><?= safekup_escape($totals['success_text']); ?></span>
                     </p>
-                    <p class="mt-1 text-xs text-green-300/80">Participação: <?= $successRateText; ?></p>
+                    <p class="mt-1 text-xs text-green-300/80">Participação: <span data-dashboard="success-rate"><?= safekup_escape($successRateText); ?></span></p>
                 </div>
 
                 <div class="rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-inner shadow-pink-900/10">
                     <p class="text-xs font-semibold uppercase tracking-wide text-pink-300">Falhas</p>
                     <p class="mt-2 text-3xl font-bold text-pink-100">
-                        <?= number_format($failureExecutions, 0, ',', '.'); ?>
+                        <span data-dashboard="total-failure"><?= safekup_escape($totals['failure_text']); ?></span>
                     </p>
-                    <p class="mt-1 text-xs text-pink-300/80">Participação: <?= $failureRateText ?? '—'; ?></p>
+                    <p class="mt-1 text-xs text-pink-300/80">Participação: <span data-dashboard="failure-rate"><?= safekup_escape($failureRateText); ?></span></p>
                 </div>
 
                 <div class="rounded-2xl border border-white/10 bg-slate-900/75 p-5 shadow-inner shadow-sky-900/10">
                     <p class="text-xs font-semibold uppercase tracking-wide text-sky-300">Volume gerado</p>
                     <p class="mt-2 text-3xl font-bold text-sky-100">
-                        <?= safekup_escape($formattedVolume); ?>
+                        <span data-dashboard="volume-text"><?= safekup_escape($formattedVolume); ?></span>
                     </p>
                     <p class="mt-1 text-xs text-slate-400">Soma de arquivos exportados</p>
                 </div>
-            </div>
-        <?php endif; ?>
+        </div>
     </section>
 
-    <?php if ($statsError === null): ?>
-        <section class="grid gap-6 xl:grid-cols-2">
+        <section class="grid gap-6 xl:grid-cols-2 <?= $statsError ? 'hidden' : ''; ?>" data-dashboard="charts-section">
             <article
                 class="rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-xl shadow-indigo-900/20">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-lg font-semibold text-white"><?= safekup_escape($executionsChartTitle); ?></h3>
-                        <p class="text-sm text-slate-300"><?= safekup_escape($executionsChartSubtitle); ?></p>
+                        <h3 class="text-lg font-semibold text-white" data-dashboard="chart-executions-title"><?= safekup_escape($chartTitles['executions_title']); ?></h3>
+                        <p class="text-sm text-slate-300" data-dashboard="chart-executions-subtitle"><?= safekup_escape($chartTitles['executions_subtitle']); ?></p>
                     </div>
-                    <span class="text-xs font-semibold uppercase tracking-wide text-indigo-300"><?= safekup_escape($periodLabel); ?></span>
+                    <span class="text-xs font-semibold uppercase tracking-wide text-indigo-300" data-dashboard="period-label"><?= safekup_escape($periodLabel); ?></span>
                 </div>
                 <div class="mt-6">
-                    <?php if ($hasDailyData): ?>
-                        <canvas id="dailyExecutionsChart" height="220"></canvas>
-                    <?php else: ?>
-                        <p class="text-sm text-slate-400">Nenhum registro encontrado no período informado.</p>
-                    <?php endif; ?>
+                    <canvas id="dailyExecutionsChart" height="220" class="<?= $hasDailyData ? '' : 'hidden'; ?>" data-dashboard="chart-executions-canvas"></canvas>
+                    <p class="text-sm text-slate-400 <?= $hasDailyData ? 'hidden' : ''; ?>" data-dashboard="chart-executions-empty">Nenhum registro encontrado no período informado.</p>
                 </div>
             </article>
 
@@ -258,17 +153,14 @@ safekup_render_header('Safekup — Painel', 'dashboard');
                 class="rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-xl shadow-indigo-900/20">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-lg font-semibold text-white"><?= safekup_escape($statusChartTitle); ?></h3>
-                        <p class="text-sm text-slate-300"><?= safekup_escape($statusChartSubtitle); ?></p>
+                        <h3 class="text-lg font-semibold text-white" data-dashboard="chart-status-title"><?= safekup_escape($chartTitles['status_title']); ?></h3>
+                        <p class="text-sm text-slate-300" data-dashboard="chart-status-subtitle"><?= safekup_escape($chartTitles['status_subtitle']); ?></p>
                     </div>
-                    <span class="text-xs font-semibold uppercase tracking-wide text-indigo-300"><?= safekup_escape($periodLabel); ?></span>
+                    <span class="text-xs font-semibold uppercase tracking-wide text-indigo-300" data-dashboard="period-label"><?= safekup_escape($periodLabel); ?></span>
                 </div>
                 <div class="mt-6">
-                    <?php if ($hasDailyData): ?>
-                        <canvas id="dailyStatusChart" height="220"></canvas>
-                    <?php else: ?>
-                        <p class="text-sm text-slate-400">Nenhum registro encontrado no período informado.</p>
-                    <?php endif; ?>
+                    <canvas id="dailyStatusChart" height="220" class="<?= $hasDailyData ? '' : 'hidden'; ?>" data-dashboard="chart-status-canvas"></canvas>
+                    <p class="text-sm text-slate-400 <?= $hasDailyData ? 'hidden' : ''; ?>" data-dashboard="chart-status-empty">Nenhum registro encontrado no período informado.</p>
                 </div>
             </article>
 
@@ -276,21 +168,18 @@ safekup_render_header('Safekup — Painel', 'dashboard');
                 class="rounded-2xl border border-white/10 bg-slate-900/70 p-6 shadow-xl shadow-indigo-900/20 xl:col-span-2">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-lg font-semibold text-white"><?= safekup_escape($volumeChartTitle); ?></h3>
-                        <p class="text-sm text-slate-300"><?= safekup_escape($volumeChartSubtitle); ?></p>
+                        <h3 class="text-lg font-semibold text-white" data-dashboard="chart-volume-title"><?= safekup_escape($chartTitles['volume_title']); ?></h3>
+                        <p class="text-sm text-slate-300" data-dashboard="chart-volume-subtitle"><?= safekup_escape($chartTitles['volume_subtitle']); ?></p>
                     </div>
-                    <span class="text-xs font-semibold uppercase tracking-wide text-indigo-300"><?= safekup_escape($periodLabel); ?></span>
+                    <span class="text-xs font-semibold uppercase tracking-wide text-indigo-300" data-dashboard="period-label"><?= safekup_escape($periodLabel); ?></span>
                 </div>
                 <div class="mt-6">
-                    <?php if ($hasDailyData): ?>
-                        <canvas id="dailyVolumeChart" height="220"></canvas>
-                    <?php else: ?>
-                        <p class="text-sm text-slate-400">Nenhum registro encontrado no período informado.</p>
-                    <?php endif; ?>
+                    <canvas id="dailyVolumeChart" height="220" class="<?= $hasDailyData ? '' : 'hidden'; ?>" data-dashboard="chart-volume-canvas"></canvas>
+                    <p class="text-sm text-slate-400 <?= $hasDailyData ? 'hidden' : ''; ?>" data-dashboard="chart-volume-empty">Nenhum registro encontrado no período informado.</p>
                 </div>
             </article>
         </section>
-    <?php endif; ?>
+    </section>
 
     <section class="rounded-2xl border border-white/10 bg-slate-900/60 p-6 shadow-xl shadow-indigo-900/20">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -370,154 +259,391 @@ safekup_render_header('Safekup — Painel', 'dashboard');
             </p>
         </article>
     </section>
-<?php if ($statsError === null && $hasDailyData): ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script>
-        const dailyLabels = <?= json_encode($dailyLabels, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-        const dailyTotals = <?= json_encode($dailyTotals, JSON_NUMERIC_CHECK); ?>;
-        const dailySuccess = <?= json_encode($dailySuccess, JSON_NUMERIC_CHECK); ?>;
-        const dailyFailures = <?= json_encode($dailyFailures, JSON_NUMERIC_CHECK); ?>;
-        const dailyVolume = <?= json_encode($dailyVolumeMb, JSON_NUMERIC_CHECK); ?>;
+        (() => {
+            const state = {
+                range: <?= (int) $rangeDays; ?>,
+                data: <?= $initialMetricsJson ?: '{}'; ?>,
+                refreshMs: 60000,
+                timer: null,
+                charts: {
+                    executions: null,
+                    status: null,
+                    volume: null
+                },
+                endpoints: {
+                    metrics: '/app/api/dashboard_metrics.php'
+                }
+            };
 
-        const chartColors = {
-            totals: 'rgba(129, 140, 248, 0.85)',
-            totalsFill: 'rgba(129, 140, 248, 0.18)',
-            success: 'rgba(74, 222, 128, 0.85)',
-            successFill: 'rgba(74, 222, 128, 0.22)',
-            failure: 'rgba(248, 113, 113, 0.85)',
-            failureFill: 'rgba(248, 113, 113, 0.22)',
-            volume: 'rgba(56, 189, 248, 0.85)',
-            volumeFill: 'rgba(56, 189, 248, 0.18)',
-        };
+            const defaultStatusBadge = <?= json_encode(safekup_badge('-', 'default')); ?>;
 
-        Chart.defaults.color = '#cbd5f5';
-        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.2)';
-        Chart.defaults.font.family = 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+            const chartColors = {
+                totals: 'rgba(129, 140, 248, 0.85)',
+                totalsFill: 'rgba(129, 140, 248, 0.18)',
+                success: 'rgba(74, 222, 128, 0.85)',
+                successFill: 'rgba(74, 222, 128, 0.22)',
+                failure: 'rgba(248, 113, 113, 0.85)',
+                failureFill: 'rgba(248, 113, 113, 0.22)',
+                volume: 'rgba(56, 189, 248, 0.85)',
+                volumeFill: 'rgba(56, 189, 248, 0.18)',
+            };
 
-        const commonScales = {
-            x: {
-                ticks: { color: '#cbd5f5' },
-                grid: { color: 'rgba(148, 163, 184, 0.12)' }
-            },
-            y: {
-                beginAtZero: true,
-                ticks: { color: '#cbd5f5' },
-                grid: { color: 'rgba(148, 163, 184, 0.12)' }
+            const selectors = {
+                rangeForm: '[data-dashboard="range-form"]',
+                rangeButtons: '[data-dashboard-range-button]',
+                periodLabel: '[data-dashboard="period-label"]',
+            };
+
+            function elements(selector) {
+                return Array.from(document.querySelectorAll(selector));
             }
-        };
 
-        const totalsCtx = document.getElementById('dailyExecutionsChart');
-        if (totalsCtx) {
-            new Chart(totalsCtx, {
-                type: 'line',
-                data: {
-                    labels: dailyLabels,
-                    datasets: [{
-                        label: 'Execuções',
-                        data: dailyTotals,
-                        borderColor: chartColors.totals,
-                        backgroundColor: chartColors.totalsFill,
-                        tension: 0.35,
-                        fill: true,
-                        pointRadius: 4,
-                        pointBackgroundColor: chartColors.totals
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: commonScales,
-                    plugins: {
-                        legend: { labels: { color: '#e2e8f0' } },
-                        tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.92)',
-                            callbacks: {
-                                label: context => ` ${context.parsed.y ?? 0} execuções`
-                            }
-                        }
+            function setText(key, value) {
+                elements(`[data-dashboard="${key}"]`).forEach((el) => {
+                    if (value === null || typeof value === 'undefined' || value === '') {
+                        el.textContent = '—';
+                    } else {
+                        el.textContent = value;
                     }
-                }
-            });
-        }
+                });
+            }
 
-        const statusCtx = document.getElementById('dailyStatusChart');
-        if (statusCtx) {
-            new Chart(statusCtx, {
-                type: 'bar',
-                data: {
-                    labels: dailyLabels,
-                    datasets: [
-                        {
-                            label: 'Sucesso',
-                            data: dailySuccess,
-                            backgroundColor: chartColors.success,
-                            stack: 'status'
-                        },
-                        {
-                            label: 'Falha',
-                            data: dailyFailures,
-                            backgroundColor: chartColors.failure,
-                            stack: 'status'
+            function setHtml(key, value) {
+                elements(`[data-dashboard="${key}"]`).forEach((el) => {
+                    el.innerHTML = value;
+                });
+            }
+
+            function toggleVisibility(selector, visible) {
+                elements(selector).forEach((el) => {
+                    el.classList.toggle('hidden', !visible);
+                });
+            }
+
+            function updateRangeButtons() {
+                const buttons = elements(selectors.rangeButtons);
+                buttons.forEach((button) => {
+                    const isActive = Number(button.value) === Number(state.range);
+                    const activeClasses = (button.dataset.activeClasses || '').split(' ').filter(Boolean);
+                    const inactiveClasses = (button.dataset.inactiveClasses || '').split(' ').filter(Boolean);
+
+                    button.classList.remove(...activeClasses, ...inactiveClasses);
+                    if (isActive) {
+                        if (activeClasses.length) {
+                            button.classList.add(...activeClasses);
                         }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { ...commonScales.x, stacked: true },
-                        y: { ...commonScales.y, stacked: true }
+                    } else if (inactiveClasses.length) {
+                        button.classList.add(...inactiveClasses);
+                    }
+                });
+            }
+
+            function updateCharts(data) {
+                const hasData = Boolean(data.has_data);
+
+                toggleVisibility('[data-dashboard="chart-executions-canvas"]', hasData);
+                toggleVisibility('[data-dashboard="chart-status-canvas"]', hasData);
+                toggleVisibility('[data-dashboard="chart-volume-canvas"]', hasData);
+                toggleVisibility('[data-dashboard="chart-executions-empty"]', !hasData);
+                toggleVisibility('[data-dashboard="chart-status-empty"]', !hasData);
+                toggleVisibility('[data-dashboard="chart-volume-empty"]', !hasData);
+
+                if (!hasData) {
+                    ['executions', 'status', 'volume'].forEach((key) => {
+                        if (state.charts[key]) {
+                            const chart = state.charts[key];
+                            chart.data.labels = [];
+                            chart.data.datasets.forEach((dataset) => {
+                                dataset.data = [];
+                            });
+                            chart.update();
+                        }
+                    });
+                    return;
+                }
+
+                Chart.defaults.color = '#cbd5f5';
+                Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.2)';
+                Chart.defaults.font.family = 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+                const commonScales = {
+                    x: {
+                        ticks: { color: '#cbd5f5' },
+                        grid: { color: 'rgba(148, 163, 184, 0.12)' }
                     },
-                    plugins: {
-                        legend: { labels: { color: '#e2e8f0' } },
-                        tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.92)',
-                            callbacks: {
-                                label: context => ` ${context.dataset.label}: ${context.parsed.y ?? 0}`
-                            }
-                        }
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#cbd5f5' },
+                        grid: { color: 'rgba(148, 163, 184, 0.12)' }
                     }
-                }
-            });
-        }
+                };
 
-        const volumeCtx = document.getElementById('dailyVolumeChart');
-        if (volumeCtx) {
-            new Chart(volumeCtx, {
-                type: 'line',
-                data: {
-                    labels: dailyLabels,
-                    datasets: [{
-                        label: 'Volume (MB)',
-                        data: dailyVolume,
-                        borderColor: chartColors.volume,
-                        backgroundColor: chartColors.volumeFill,
-                        fill: true,
-                        tension: 0.35,
-                        pointRadius: 4,
-                        pointBackgroundColor: chartColors.volume
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: commonScales,
-                    plugins: {
-                        legend: { labels: { color: '#e2e8f0' } },
-                        tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.92)',
-                            callbacks: {
-                                label: context => {
-                                    const value = context.parsed.y ?? 0;
-                                    return ` ${value.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} MB`;
+                const labels = data.chart.labels || [];
+                const totalsData = data.chart.totals || [];
+                const successData = data.chart.success || [];
+                const failureData = data.chart.failures || [];
+                const volumeData = data.chart.volume_mb || [];
+
+                if (!state.charts.executions) {
+                    const ctx = document.getElementById('dailyExecutionsChart');
+                    if (ctx) {
+                        state.charts.executions = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Execuções',
+                                    data: totalsData,
+                                    borderColor: chartColors.totals,
+                                    backgroundColor: chartColors.totalsFill,
+                                    tension: 0.35,
+                                    fill: true,
+                                    pointRadius: 4,
+                                    pointBackgroundColor: chartColors.totals
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: commonScales,
+                                plugins: {
+                                    legend: { labels: { color: '#e2e8f0' } },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                                        callbacks: {
+                                            label: (context) => ` ${context.parsed.y ?? 0} execuções`
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        });
                     }
+                } else {
+                    const chart = state.charts.executions;
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].data = totalsData;
+                    chart.update();
                 }
-            });
-        }
+
+                if (!state.charts.status) {
+                    const ctx = document.getElementById('dailyStatusChart');
+                    if (ctx) {
+                        state.charts.status = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [
+                                    {
+                                        label: 'Sucesso',
+                                        data: successData,
+                                        backgroundColor: chartColors.success,
+                                        stack: 'status'
+                                    },
+                                    {
+                                        label: 'Falha',
+                                        data: failureData,
+                                        backgroundColor: chartColors.failure,
+                                        stack: 'status'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: { ...commonScales.x, stacked: true },
+                                    y: { ...commonScales.y, stacked: true }
+                                },
+                                plugins: {
+                                    legend: { labels: { color: '#e2e8f0' } },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                                        callbacks: {
+                                            label: (context) => ` ${context.dataset.label}: ${context.parsed.y ?? 0}`
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    const chart = state.charts.status;
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].data = successData;
+                    chart.data.datasets[1].data = failureData;
+                    chart.update();
+                }
+
+                if (!state.charts.volume) {
+                    const ctx = document.getElementById('dailyVolumeChart');
+                    if (ctx) {
+                        state.charts.volume = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Volume (MB)',
+                                    data: volumeData,
+                                    borderColor: chartColors.volume,
+                                    backgroundColor: chartColors.volumeFill,
+                                    fill: true,
+                                    tension: 0.35,
+                                    pointRadius: 4,
+                                    pointBackgroundColor: chartColors.volume
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: commonScales,
+                                plugins: {
+                                    legend: { labels: { color: '#e2e8f0' } },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                                        callbacks: {
+                                            label: (context) => {
+                                                const value = context.parsed.y ?? 0;
+                                                return ` ${value.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} MB`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    const chart = state.charts.volume;
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].data = volumeData;
+                    chart.update();
+                }
+            }
+
+            function applyData(data) {
+                state.data = data;
+
+                const period = data.period || {};
+                const totals = data.totals || {};
+                const chartTitles = data.chart_titles || {};
+                const latest = data.latest_dump || null;
+
+                setText('period-title', period.title || '');
+                setText('period-description', period.description || '');
+                setText('period-label', period.label || '');
+
+                setText('total-executions', totals.executions_text || '0');
+                setText('total-success', totals.success_text || '0');
+                setText('total-failure', totals.failure_text || '0');
+                setText('success-rate', totals.success_rate_text || '—');
+                setText('failure-rate', totals.failure_rate_text || '—');
+                setText('volume-text', totals.volume_text || '—');
+
+                toggleVisibility('[data-dashboard="latest-card"]', Boolean(latest));
+                if (latest) {
+                    setText('latest-name', latest.bd_nome_usuario || '-');
+                    setText('latest-datetime', latest.data_execucao_text || '-');
+                    setHtml('latest-status', latest.status_badge_html || defaultStatusBadge);
+                }
+
+                setText('error-text', data.error ?? '');
+                toggleVisibility('[data-dashboard="error"]', Boolean(data.error));
+                toggleVisibility('[data-dashboard="stats-container"]', !data.error);
+                toggleVisibility('[data-dashboard="charts-section"]', !data.error);
+
+                setText('chart-executions-title', chartTitles.executions_title || '');
+                setText('chart-executions-subtitle', chartTitles.executions_subtitle || '');
+                setText('chart-status-title', chartTitles.status_title || '');
+                setText('chart-status-subtitle', chartTitles.status_subtitle || '');
+                setText('chart-volume-title', chartTitles.volume_title || '');
+                setText('chart-volume-subtitle', chartTitles.volume_subtitle || '');
+
+                updateRangeButtons();
+                updateCharts(data);
+            }
+
+            function fetchData() {
+                const url = new URL(state.endpoints.metrics, window.location.origin);
+                url.searchParams.set('range', String(state.range));
+
+                return fetch(url.toString(), {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                    credentials: 'same-origin'
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then((payload) => {
+                        if (payload && payload.data) {
+                            applyData(payload.data);
+                        } else {
+                            throw new Error('Resposta inválida do servidor.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Falha ao atualizar indicadores', error);
+                        setText('error-text', 'Não foi possível atualizar os indicadores automaticamente.');
+                        toggleVisibility('[data-dashboard="error"]', true);
+                    });
+            }
+
+            function updateUrl() {
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('range', String(state.range));
+                window.history.replaceState({}, '', currentUrl.toString());
+            }
+
+            function scheduleRefresh() {
+                if (state.timer) {
+                    clearInterval(state.timer);
+                }
+                state.timer = setInterval(() => {
+                    fetchData().catch(() => {});
+                }, state.refreshMs);
+            }
+
+            function initRangeControls() {
+                const form = document.querySelector(selectors.rangeForm);
+                if (form) {
+                    form.addEventListener('submit', (event) => event.preventDefault());
+                }
+                elements(selectors.rangeButtons).forEach((button) => {
+                    button.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        const newRange = Number(button.value);
+                        if (Number.isNaN(newRange) || newRange === state.range) {
+                            return;
+                        }
+                        state.range = newRange;
+                        updateRangeButtons();
+                        updateUrl();
+                        fetchData().then(() => {
+                            scheduleRefresh();
+                        });
+                    });
+                });
+            }
+
+            function init() {
+                if (state.data) {
+                    applyData(state.data);
+                }
+                initRangeControls();
+                updateUrl();
+                scheduleRefresh();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
     </script>
-<?php endif; ?>
 <?php
 safekup_render_footer();

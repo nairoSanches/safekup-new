@@ -402,6 +402,14 @@ safekup_render_header('Safekup — Bancos de Dados', 'bancos');
                                             <i class="fa fa-pencil"></i>
                                             <span>Editar</span>
                                         </button>
+                                        <button type="button"
+                                            data-backup-trigger
+                                            data-backup-id="<?= (int)$row['bd_id']; ?>"
+                                            data-backup-name="<?= safekup_escape($row['bd_nome_usuario']); ?>"
+                                            class="inline-flex items-center gap-2 rounded-lg bg-indigo-500/20 px-3 py-1.5 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-500/30">
+                                            <i class="fa fa-play-circle"></i>
+                                            <span>Executar dump</span>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -729,6 +737,81 @@ safekup_render_header('Safekup — Bancos de Dados', 'bancos');
                         openModal('edit');
                     }
                 });
+            });
+
+            function showNotification(type, message) {
+                const baseClasses = 'fixed right-4 top-4 z-50 flex items-center gap-3 rounded-lg px-4 py-3 text-sm shadow-xl';
+                const variants = {
+                    success: 'bg-emerald-500/20 text-emerald-100 border border-emerald-500/40 backdrop-blur',
+                    warning: 'bg-amber-500/20 text-amber-100 border border-amber-500/40 backdrop-blur',
+                    error: 'bg-rose-500/20 text-rose-100 border border-rose-500/40 backdrop-blur',
+                    info: 'bg-indigo-500/20 text-indigo-100 border border-indigo-500/40 backdrop-blur'
+                };
+                const notification = document.createElement('div');
+                notification.className = `${baseClasses} ${variants[type] ?? variants.info}`;
+                notification.innerHTML = `
+                    <i class="fa ${type === 'success' ? 'fa-check-circle' : type === 'warning' ? 'fa-exclamation-triangle' : type === 'error' ? 'fa-times-circle' : 'fa-info-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.classList.add('opacity-0', 'transition', 'duration-300');
+                    setTimeout(() => notification.remove(), 320);
+                }, 5000);
+            }
+
+            async function triggerManualBackup(button) {
+                const bdId = button.getAttribute('data-backup-id');
+                const bdName = button.getAttribute('data-backup-name') || 'banco';
+                if (!bdId) {
+                    showNotification('error', 'Não foi possível identificar o banco selecionado.');
+                    return;
+                }
+
+                if (!confirm(`Executar o dump agora para "${bdName}"?`)) {
+                    return;
+                }
+
+                const originalHtml = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = '<i class="fa fa-spinner fa-spin"></i><span>Executando...</span>';
+
+                try {
+                    const response = await fetch('/scripts/backups/manual_dump.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        credentials: 'same-origin',
+                        body: new URLSearchParams({ bd_id: bdId })
+                    });
+
+                    const text = (await response.text()).trim().toLowerCase();
+
+                    if (!response.ok) {
+                        throw new Error(text || 'Resposta inválida do servidor.');
+                    }
+
+                    if (text === 'inativo') {
+                        showNotification('warning', 'O backup deste banco está inativo. Verifique o cadastro.');
+                    } else if (text === 'erro_montagem') {
+                        showNotification('error', 'Erro ao montar o compartilhamento para executar o dump.');
+                    } else if (text === 'erro_ssh') {
+                        showNotification('error', 'Não foi possível estabelecer conexão SSH para este banco.');
+                    } else if (text === 'erro') {
+                        showNotification('error', 'Ocorreu um erro durante a execução do dump.');
+                    } else {
+                        showNotification('success', `Dump do banco "${bdName}" executado com sucesso. Aguarde o e-mail com os detalhes.`);
+                    }
+                } catch (error) {
+                    console.error('Falha ao executar dump imediato', error);
+                    showNotification('error', 'Falha ao executar o dump agora. Tente novamente mais tarde.');
+                } finally {
+                    button.disabled = false;
+                    button.innerHTML = originalHtml;
+                }
+            }
+
+            document.querySelectorAll('[data-backup-trigger]').forEach(button => {
+                button.addEventListener('click', () => triggerManualBackup(button));
             });
 
             toggleAllDaysBtn.addEventListener('click', () => {
