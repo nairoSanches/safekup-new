@@ -151,6 +151,60 @@ function safekup_badge(string $label, string $variant = 'default'): string
     );
 }
 
+function safekup_render_database_label(?string $label): string
+{
+    $normalized = strtolower(trim((string) ($label ?? '')));
+    if ($normalized === '') {
+        return '-';
+    }
+
+    $icons = [
+        'mysql' => ['/assets/images/mysql.png', 'MySQL'],
+        'mariadb' => ['/assets/images/mariadb.jpeg', 'MariaDB'],
+        'maria db' => ['/assets/images/mariadb.jpeg', 'MariaDB'],
+        'postgresql' => ['/assets/images/pg.png', 'PostgreSQL'],
+        'postgres' => ['/assets/images/pg.png', 'PostgreSQL'],
+        'postgres database' => ['/assets/images/pg.png', 'PostgreSQL'],
+    ];
+
+    if (isset($icons[$normalized])) {
+        [$src, $alt] = $icons[$normalized];
+        return sprintf(
+            '<span class="inline-flex items-center gap-2"><img src="%s" alt="%s" class="h-6 w-6 rounded-md bg-white/10 p-1 shadow shadow-slate-900/30" />%s</span>',
+            safekup_escape($src),
+            safekup_escape($alt),
+            safekup_escape($label)
+        );
+    }
+
+    return safekup_escape($label);
+}
+
+function safekup_render_platform_label(?string $label): string
+{
+    $normalized = strtolower(trim((string) ($label ?? '')));
+    if ($normalized === '') {
+        return '-';
+    }
+
+    $iconMap = [
+        'linux' => ['fa-linux', 'bg-orange-500/20 text-orange-300'],
+        'windows' => ['fa-windows', 'bg-sky-500/20 text-sky-300'],
+    ];
+
+    if (isset($iconMap[$normalized])) {
+        [$iconClass, $colorClasses] = $iconMap[$normalized];
+        return sprintf(
+            '<span class="inline-flex items-center gap-2"><span class="flex h-6 w-6 items-center justify-center rounded-md %s"><i class="fa %s"></i></span>%s</span>',
+            safekup_escape($colorClasses),
+            safekup_escape($iconClass),
+            safekup_escape($label)
+        );
+    }
+
+    return safekup_escape($label);
+}
+
 function safekup_perfil_label($perfilId): string
 {
     $perfilId = (string) $perfilId;

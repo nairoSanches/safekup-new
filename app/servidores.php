@@ -171,7 +171,7 @@ safekup_render_header('Safekup — Servidores de Backup', 'servidores');
                                 <td class="px-4 py-3 font-medium"><?= safekup_escape($row['servidor_nome']); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['servidor_ip']); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['servidor_user_privilegio']); ?></td>
-                                <td class="px-4 py-3"><?= safekup_escape($row['servidor_plataforma']); ?></td>
+                                <td class="px-4 py-3"><?= safekup_render_platform_label($row['servidor_plataforma'] ?? null); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['servidor_nome_compartilhamento']); ?></td>
                                 <td class="px-4 py-3">
                                     <div class="flex flex-wrap gap-2">

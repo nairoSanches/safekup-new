@@ -41,17 +41,21 @@ $conditions = [];
 $params = [];
 
 if ($bancoFilter !== '') {
-    $conditions[] = 'bd_nome_usuario LIKE :banco';
+    $conditions[] = 'hist.bd_nome_usuario LIKE :banco';
     $params[':banco'] = '%' . $bancoFilter . '%';
 }
 
 if ($statusFilter !== '') {
-    $conditions[] = 'status = :status';
+    $conditions[] = 'hist.status = :status';
     $params[':status'] = $statusFilter;
 }
 
 $whereClause = $conditions ? (' WHERE ' . implode(' AND ', $conditions)) : '';
-$baseSql = "FROM {$config['table']}";
+$baseSql = "
+    FROM {$config['table']} hist
+    LEFT JOIN db_management dbm ON hist.bd_id = dbm.bd_id
+    LEFT JOIN tipo t ON dbm.bd_tipo = t.tipo_id
+";
 
 $countStmt = $db->prepare("SELECT COUNT(*) {$baseSql}{$whereClause}");
 foreach ($params as $key => $value) {
@@ -68,9 +72,18 @@ if ($page > $totalPages) {
 $offset = ($page - 1) * $perPage;
 
 $dataSql = "
-    SELECT id, bd_nome_usuario, bd_ip, data_execucao, status, tamanho_arquivo, tempo_decorrido
+    SELECT
+        hist.id,
+        hist.bd_nome_usuario,
+        hist.bd_ip,
+        hist.data_execucao,
+        hist.status,
+        hist.tamanho_arquivo,
+        hist.tempo_decorrido,
+        hist.arquivo_backup,
+        t.tipo_nome
     {$baseSql}{$whereClause}
-    ORDER BY data_execucao DESC
+    ORDER BY hist.data_execucao DESC
     LIMIT :limit OFFSET :offset
 ";
 
@@ -208,12 +221,13 @@ safekup_render_header('Safekup — Relatórios', 'relatorios');
                         <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">Status</th>
                         <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">Tempo</th>
                         <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">Tamanho</th>
+                        <th class="px-4 py-3 text-left font-semibold uppercase tracking-wide">Download</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5 text-slate-200">
                     <?php if (empty($rows)): ?>
                         <tr>
-                            <td colspan="5" class="px-4 py-6 text-center text-slate-400">
+                            <td colspan="6" class="px-4 py-6 text-center text-slate-400">
                                 <?= safekup_escape($config['empty_message']); ?>
                             </td>
                         </tr>
@@ -223,12 +237,22 @@ safekup_render_header('Safekup — Relatórios', 'relatorios');
                                 $statusRaw = (string) ($row['status'] ?? '');
                                 $isOk = in_array(strtoupper($statusRaw), ['SUCESSO', 'OK'], true);
                                 $statusLabel = $statusRaw !== '' ? $statusRaw : 'Indefinido';
+                                $tipoNome = trim((string) ($row['tipo_nome'] ?? ''));
+                                $canDownload = !empty($row['arquivo_backup'])
+                                    || (!empty($row['bd_ip']) && $tipoNome !== '' && !empty($row['bd_nome_usuario']) && !empty($row['data_execucao']));
                             ?>
                             <tr class="hover:bg-slate-800/50">
                                 <td class="px-4 py-3">
-                                    <div class="flex flex-col">
-                                        <span class="font-medium"><?= safekup_escape($row['bd_nome_usuario']); ?></span>
-                                        <span class="text-xs text-slate-400 font-mono"><?= safekup_escape($row['bd_ip']); ?></span>
+                                    <div class="flex flex-col gap-1">
+                                        <?php if ($tipoNome !== ''): ?>
+                                            <div class="text-xs font-semibold text-slate-300">
+                                                <?= safekup_render_database_label($tipoNome); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="flex flex-col">
+                                            <span class="font-medium"><?= safekup_escape($row['bd_nome_usuario']); ?></span>
+                                            <span class="text-xs text-slate-400 font-mono"><?= safekup_escape($row['bd_ip']); ?></span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3"><?= safekup_escape(safekup_format_datetime($row['data_execucao'])); ?></td>
@@ -240,6 +264,18 @@ safekup_render_header('Safekup — Relatórios', 'relatorios');
                                 </td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['tempo_decorrido'] ?? '-'); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape(safekup_format_size($row['tamanho_arquivo'] ?? null)); ?></td>
+                                <td class="px-4 py-3">
+                                    <?php if ($canDownload): ?>
+                                        <a href="/app/api/download_backup.php?id=<?= (int)($row['id'] ?? 0); ?>"
+                                           class="inline-flex items-center gap-2 rounded-lg border border-indigo-400/60 px-3 py-1.5 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-500/20 hover:text-white"
+                                           title="Baixar backup">
+                                            <i class="fa fa-download"></i>
+                                            <span>Baixar</span>
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-xs text-slate-400">Arquivo indisponível</span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

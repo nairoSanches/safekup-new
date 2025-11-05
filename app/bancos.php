@@ -382,7 +382,7 @@ safekup_render_header('Safekup — Bancos de Dados', 'bancos');
                                         <span class="text-xs text-slate-400 font-mono"><?= safekup_escape($row['bd_ip']); ?><?= $row['bd_porta'] ? ':' . safekup_escape($row['bd_porta']) : ''; ?></span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3"><?= safekup_escape($row['tipo_nome'] ?? '-'); ?></td>
+                                <td class="px-4 py-3"><?= safekup_render_database_label($row['tipo_nome'] ?? null); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['app_nome'] ?? '-'); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['servidor_nome'] ?? '-'); ?></td>
                                 <td class="px-4 py-3"><?= safekup_escape($row['bd_hora_backup']); ?>:00</td>
