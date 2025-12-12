@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# === CONFIGURAÇÃO ===
+# === CONFIGURACAO ===
 
 BASE_DIR="/DBbackup"
 LOG_FILE="/opt/lampp/htdocs/safekup/cron/log/backup_cleanup.log"
 
-# Regras de retenção (pode alterar os parametros)
+# Regras de retencao (pode alterar os parametros)
 RETENTION_RULES=(
-  "0 6 daily 4 Diária (0–6 dias, 4 cópias/dia)"
-  "7 60 daily 1 Diária (7–60 dias, 1 cópia/dia)"
-  "61 1095 monthly 1 Mensal (61–1095 dias, 1 cópia/mês)"
+  "0 6 daily 4 Diaria (0-6 dias, 4 copias/dia)"
+  "7 60 daily 1 Diaria (7-60 dias, 1 copia/dia)"
+  "61 1095 monthly 1 Mensal (61-1095 dias, 1 copia/mes)"
 )
 
 
@@ -25,7 +25,7 @@ retain_backups() {
     local keep_limit="$5"
     local rule_name="$6"
 
-    log_message "Regra ${rule_name}: Início. Período de $(date -d @$min_epoch +%F) até $(date -d @$max_epoch +%F)."
+    log_message "Regra ${rule_name}: Inicio. Periodo de $(date -d @$min_epoch +%F) ate $(date -d @$max_epoch +%F)."
 
     mapfile -t files < <(find "$path" -type f \( -name "*.zip" -o -name "*.zst" \) -printf "%T@ %p\n" | sort -n)
 
@@ -48,8 +48,9 @@ retain_backups() {
     done
 
     for period in "${!grouped_files[@]}"; do
-        IFS=$'\n' read -r -d '' -a entries < <(echo "${grouped_files[$period]}" | sort -n | tr '\n' '\0')
-        for ((i=${#entries[@]}-1; i>=keep_limit; i--)); do
+        # Ordena mais recentes primeiro e remove a partir do limite definido.
+        IFS=$'\n' read -r -d '' -a entries < <(echo "${grouped_files[$period]}" | sort -nr | tr '\n' '\0')
+        for ((i=keep_limit; i<${#entries[@]}; i++)); do
             file_path=$(echo "${entries[$i]}" | cut -d'|' -f2)
             rm -f "$file_path"
             deleted=$((deleted + 1))
@@ -57,19 +58,20 @@ retain_backups() {
         done
     done
 
-    log_message "Regra ${rule_name}: Fim. $deleted arquivos excluídos."
+    log_message "Regra ${rule_name}: Fim. $deleted arquivos excluidos."
 }
 
 
-log_message "====== Início da rotina de retenção de backups ======"
+log_message "====== Inicio da rotina de retencao de backups ======"
 
 now=$(date +%s)
 
 for rule in "${RETENTION_RULES[@]}"; do
-    read min_days max_days period_type keep_limit rule_name <<< "$rule"
+    read -r min_days max_days period_type keep_limit _ <<< "$rule"
+    rule_name=${rule#"$min_days $max_days $period_type $keep_limit "}
     min_epoch=$((now - max_days * 86400))
     max_epoch=$((now - min_days * 86400))
     retain_backups "$BASE_DIR" "$min_epoch" "$max_epoch" "$period_type" "$keep_limit" "$rule_name"
 done
 
-log_message "====== Fim da rotina de retenção de backups ======"
+log_message "====== Fim da rotina de retencao de backups ======"
